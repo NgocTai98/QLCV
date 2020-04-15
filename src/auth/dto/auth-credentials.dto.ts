@@ -12,9 +12,9 @@ export class AuthCredentialsDto {
     // @IsString()
     // @MinLength(4)
     // @MaxLength(50)
-    fullname: string;
+    fullname?: string;
     // @IsNumber()
-    level: number;
+    level?: number;
     // @IsString()
-    rememberToken: string;
+    rememberToken?: string;
 }

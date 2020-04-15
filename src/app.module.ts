@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { ErrorModule } from './error/error.module';
+
 
 
 
@@ -15,8 +15,7 @@ import { ErrorModule } from './error/error.module';
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
     UsersModule,
-    AuthModule,
-    ErrorModule, 
+    AuthModule,   
   ],
   controllers: [AppController],
   providers: [AppService],

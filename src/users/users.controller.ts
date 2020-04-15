@@ -1,13 +1,14 @@
-import { Controller, Get, Param, Post, Put, Delete, Body, Response, Render, } from '@nestjs/common';
+import { Controller, Get, Param, Post, Put, Delete, Body, Response, Render, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
     constructor(private Userservice: UsersService) { }
 
     @Get()
-
+    @UseGuards(AuthGuard())
     async getUsers(@Response() res) {
         try {
             let user = await this.Userservice.getUsers();
@@ -29,6 +30,7 @@ export class UsersController {
     }
 
     @Get(':id')
+    @UseGuards(AuthGuard())
     async getUser(@Param() params, @Response() res) {
         try {
             let user = await this.Userservice.getUser(params.id);
@@ -48,6 +50,7 @@ export class UsersController {
 
     }
     @Post()
+    @UseGuards(AuthGuard())
     async create(@Body() user: Users, @Response() res) {
         try {
             let userCreate = await this.Userservice.createUser(user);
@@ -68,6 +71,7 @@ export class UsersController {
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard())
     async update(@Param() Params, @Body() user: Users, @Response() res) {
         try {
             user.id = Params.id;
@@ -89,6 +93,7 @@ export class UsersController {
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard())
     async deleteUser(@Param() params, @Response() res) {
         try {
             let user = await this.Userservice.deleteUser(params.id);
