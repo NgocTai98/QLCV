@@ -53,8 +53,7 @@ export class AuthController {
     async googleLogin() {
         // initiates the Google OAuth2 login flow
         // return await this.authService.validateOAuthLogin('s', Provider);
-        console.log('a');
-        
+       
         
     }
 
