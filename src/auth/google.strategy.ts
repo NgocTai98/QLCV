@@ -47,17 +47,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google')
                     {
                         jwt
                     }
-
+                   
                     return user;
-
-                }
-
+                } 
+                return {};
             }
 
         }
         catch (err) {
-            console.log(err)
-            done(err, false);
+           return err;
         }
     }
 

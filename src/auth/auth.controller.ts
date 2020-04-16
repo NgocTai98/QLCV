@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 
 
+
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -11,8 +12,9 @@ export class AuthController {
     ) { }
 
     @Post('/signup')
-    async signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res): Promise<void> {
+    async signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res, @Request() req): Promise<void> {
         try {
+            
             let newUser = await this.authService.signUp(authCredentialsDto);
 
             return res.json({
@@ -51,25 +53,24 @@ export class AuthController {
     async googleLogin() {
         // initiates the Google OAuth2 login flow
         // return await this.authService.validateOAuthLogin('s', Provider);
+        console.log('a');
+        
+        
     }
 
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
-    googleLoginCallback(@Request() req, @Response() res) {
+    async googleLoginCallback(@Request() req, @Response() res) {
         // handles the Google OAuth2 callback
-        const jwt: string = req.user.jwt;
+        const jwt: string = await req.user.jwt;
         
-       
-        if (jwt)
-            // res.redirect('http://localhost:4200/login/succes/' + jwt);
-            res.json({
-                message: 'Đăng nhập thành công'
-            })
-        else 
-            // res.redirect('http://localhost:4200/login/failure');
-            res.json({
-                message: 'Đăng nhập không thành công'
-            })
+        if (jwt) {
+            res.redirect('http://localhost:3000');
+        } else {
+            res.redirect('http://localhost:3000/auth/google');
+        }
+            
+            
     }
 
     @Get('protected')

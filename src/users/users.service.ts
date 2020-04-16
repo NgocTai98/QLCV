@@ -2,15 +2,27 @@ import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './user.entity';
-// import { UpdateResult, DeleteResult } from  'typeorm';
+import { UserCredentialsDto } from './dto/user-credentials.dto';
+import { UserRepository } from './user.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(Users) private usersRepository: Repository<Users>) { }
+    constructor(
+        @InjectRepository(Users) private usersRepository: Repository<Users>,
+        private userRepository: UserRepository,
+        private jwtService: JwtService
+    ) { }
 
     async getUsers(): Promise<Users[]> {
+
         return await this.usersRepository.find();
     }
+
+    async listUsers() {
+        return await this.userRepository.getUsers();
+    }
+
     async getUser(_id: number): Promise<Users[]> {
         let user = await this.usersRepository.find({
             where: [{ "id": _id }]
@@ -20,31 +32,24 @@ export class UsersService {
         }
         return user;
     }
-    async createUser(user: Users) {
-        let newUser = await this.usersRepository.save(user);
-        if (!newUser) {
-            throw new HttpException('Không thể thêm mới', 400);
-        }
-        return newUser;
-    }
-    async updateUser(user: Users) {
-        await this.usersRepository.update(user.id, user);
-        let userUpdate = await this.usersRepository.findOne(user.id);
-        if (!userUpdate) {
-            throw new HttpException('Không thể update', 400)
-        }
-        return userUpdate;
+    async createUser(userCredentialsDto: UserCredentialsDto) {
+        return await this.userRepository.createUser(userCredentialsDto);
 
     }
-
-    async deleteUser(_id: number) {
-        let user = await this.usersRepository.delete(_id);
-        let user1 = await this.usersRepository.findOne(_id);
-        
-        if (user1) {
-            throw new HttpException('Không thể xóa', 400)
+    async updateUser(id: number, userCredentialsDto: UserCredentialsDto, token: string) {
+        let userId = this.jwtService.verify(token);
+       
+        await this.userRepository.updateUser(id, userCredentialsDto, userId.sub);
+        let user = await this.usersRepository.findOne(id, {select: ['email', 'password', 'fullname']});
+        if (!user) {
+            throw new HttpException('Không thể sửa',400);
         }
         return user;
+    }
 
+    async deleteUser(id: number) {
+        return await this.userRepository.deleteUser(id);
+     
+       
     }
 }

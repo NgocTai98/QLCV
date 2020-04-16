@@ -18,10 +18,9 @@ export class Users extends BaseEntity {
     fullname:string;
 
     @Column()
-    level:number;
+    lastEditedBy:number;
 
-    @Column({ length: 255 })
-    rememberToken:string;
+    
 
 
     async validatePassword(password: string): Promise<boolean> {
