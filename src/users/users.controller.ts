@@ -8,7 +8,7 @@ export class UsersController {
     constructor(private Userservice: UsersService) { }
 
     @Get()
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async getUsers(@Response() res) {
         try {
             let user = await this.Userservice.getUsers();
@@ -30,7 +30,7 @@ export class UsersController {
     }
 
     @Get(':id')
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async getUser(@Param() params, @Response() res) {
         try {
             let user = await this.Userservice.getUser(params.id);
@@ -50,7 +50,7 @@ export class UsersController {
 
     }
     @Post()
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body() user: Users, @Response() res) {
         try {
             let userCreate = await this.Userservice.createUser(user);
@@ -71,7 +71,7 @@ export class UsersController {
     }
 
     @Put(':id')
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async update(@Param() Params, @Body() user: Users, @Response() res) {
         try {
             user.id = Params.id;
@@ -93,7 +93,7 @@ export class UsersController {
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async deleteUser(@Param() params, @Response() res) {
         try {
             let user = await this.Userservice.deleteUser(params.id);

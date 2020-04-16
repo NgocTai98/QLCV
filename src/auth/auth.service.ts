@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { UserRepository } from '../users/user.repository';
 import { sign } from 'jsonwebtoken';
+import { jwtConstants } from './constants';
 
 
 
@@ -16,7 +17,8 @@ export enum Provider
 export class AuthService {
     constructor(
         @InjectRepository(UserRepository) private usersRepository: UserRepository,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        
     ) { }
 
 
@@ -44,25 +46,26 @@ export class AuthService {
     {
         try 
         {
-            // You can add some registration logic here, 
-            // to register the user using their thirdPartyId (in this case their googleId)
-            // let user: IUser = await this.usersService.findOneByThirdPartyId(thirdPartyId, provider);
             
-            // if (!user)
-            //     user = await this.usersService.registerOAuthUser(thirdPartyId, provider);
+        
                 
             const payload = {
                 thirdPartyId,
                 provider
             }
 
-            const jwt: string = sign(payload, 'secretKeyOfSavvycom', { expiresIn: '1d' });
-            return jwt;
-        }
+           
+            const jwt: string = sign(payload, jwtConstants.secret, { expiresIn: '1d' });
+                return jwt;
+            }
+
+           
+        
         catch (err)
         {
             throw new InternalServerErrorException('validateOAuthLogin', err.message);
         }
+   
     }
 
 }

@@ -37,7 +37,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             //    return done(new UnauthorizedException('invalid token claims'), false);
     
             // done(validClaims, payload);
-            done(null, payload);
+            return payload;
+            done(payload);
         }
         catch (err)
         {

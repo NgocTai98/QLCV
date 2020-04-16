@@ -3,6 +3,7 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 
+
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -47,8 +48,9 @@ export class AuthController {
 
     @Get('google')
     @UseGuards(AuthGuard('google'))
-    googleLogin() {
+    async googleLogin() {
         // initiates the Google OAuth2 login flow
+        // return await this.authService.validateOAuthLogin('s', Provider);
     }
 
     @Get('google/callback')
@@ -56,10 +58,18 @@ export class AuthController {
     googleLoginCallback(@Request() req, @Response() res) {
         // handles the Google OAuth2 callback
         const jwt: string = req.user.jwt;
+        
+       
         if (jwt)
-            res.redirect('http://localhost:4200/login/succes/' + jwt);
+            // res.redirect('http://localhost:4200/login/succes/' + jwt);
+            res.json({
+                message: 'Đăng nhập thành công'
+            })
         else 
-            res.redirect('http://localhost:4200/login/failure');
+            // res.redirect('http://localhost:4200/login/failure');
+            res.json({
+                message: 'Đăng nhập không thành công'
+            })
     }
 
     @Get('protected')
