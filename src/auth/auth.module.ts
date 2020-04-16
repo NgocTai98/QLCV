@@ -8,7 +8,6 @@ import { UserRepository } from '../users/user.repository';
 import { JwtStrategy } from './jwt.strategy';
 import { jwtConstants } from './constants';
 import { GoogleStrategy } from './google.strategy';
-import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
 
 
@@ -27,10 +26,8 @@ import { UsersModule } from 'src/users/users.module';
         PassportModule.register({
             defaultStrategy: 'jwt'
         }),
-        TypeOrmModule.forFeature([UserRepository]),   
-        // UsersService  ,
-        // forwardRef(() => UsersModule)   
-        UsersModule
+        TypeOrmModule.forFeature([UserRepository]),  
+        forwardRef(() => UsersModule),
     ],
     providers: [AuthService, JwtStrategy, GoogleStrategy],
     controllers: [AuthController],

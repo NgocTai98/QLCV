@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { UserRepository } from '../users/user.repository';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { jwtConstants } from './constants';
 
 
@@ -22,8 +22,8 @@ export class AuthService {
     ) { }
 
 
-    async signUp(authCredentialsDto: AuthCredentialsDto) {
-
+    async signUp(authCredentialsDto: AuthCredentialsDto, ) {
+       
         await this.usersRepository.signUp(authCredentialsDto);
 
         return authCredentialsDto;
@@ -33,7 +33,7 @@ export class AuthService {
         let result = await this.usersRepository.validateUserPassword(authCredentialsDto);
 
         if (result != null) {
-            const payload = { email: result.email, role: result.level };
+            const payload = { email: result.email, sub: result.id };
             const access_token = this.jwtService.sign(payload);
             return [result, access_token];
         } else {
@@ -47,22 +47,16 @@ export class AuthService {
         try 
         {
             
-        
-                
             const payload = {
                 thirdPartyId,
                 provider
             }
-
-           
             const jwt: string = sign(payload, jwtConstants.secret, { expiresIn: '1d' });
                 return jwt;
             }
-
-           
-        
         catch (err)
         {
+            
             throw new InternalServerErrorException('validateOAuthLogin', err.message);
         }
    
