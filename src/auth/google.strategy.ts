@@ -8,6 +8,7 @@ import { compare } from "bcrypt";
 
 
 
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google')
 {
@@ -37,22 +38,22 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google')
             let email = await oAuth2Client.getTokenInfo(accessToken);
 
             let result = await this.usersService.getUsers();
-
+            const jwt: string = await this.authService.validateOAuthLogin(profile.id, Provider.GOOGLE);
+            const user =
+            {
+                jwt
+            }
+           
             for (let i = 0; i < result.length; i++) {
                 const e = result[i];
 
                 if (e.email == email.email) {
-                    const jwt: string = await this.authService.validateOAuthLogin(profile.id, Provider.GOOGLE);
-                    const user =
-                    {
-                        jwt
-                    }
-                   
-                    return user;
+                      return user;
                 } 
-                return {};
+               
             }
-
+            return {};
+            
         }
         catch (err) {
            return err;
