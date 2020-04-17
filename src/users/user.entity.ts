@@ -1,5 +1,7 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, Unique, ManyToOne, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt'
+import { type } from 'os';
+import { Employee } from 'src/employee/employee.entity';
 
 @Entity()
 @Unique(['email'])
@@ -18,8 +20,10 @@ export class Users extends BaseEntity {
     fullname:string;
 
     @Column()
-    lastEditedBy:number;
+    lastEditedBy: Number
 
+    @OneToMany(type => Employee, employee => employee.user)
+    employees: Employee[];
     
 
 

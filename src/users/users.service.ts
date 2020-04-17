@@ -19,7 +19,7 @@ export class UsersService {
         return await this.usersRepository.find();
     }
 
-    async listUsers() {
+    async listUsers(): Promise<Users[]> {
         return await this.userRepository.getUsers();
     }
 
@@ -32,11 +32,11 @@ export class UsersService {
         }
         return user;
     }
-    async createUser(userCredentialsDto: UserCredentialsDto) {
+    async createUser(userCredentialsDto: UserCredentialsDto): Promise<void> {
         return await this.userRepository.createUser(userCredentialsDto);
 
     }
-    async updateUser(id: number, userCredentialsDto: UserCredentialsDto, token: string) {
+    async updateUser(id: number, userCredentialsDto: UserCredentialsDto, token: string): Promise<Users> {
         let userId = this.jwtService.verify(token);
        
         await this.userRepository.updateUser(id, userCredentialsDto, userId.sub);
@@ -47,8 +47,8 @@ export class UsersService {
         return user;
     }
 
-    async deleteUser(id: number) {
-        return await this.userRepository.deleteUser(id);
+    async deleteUser(id: number): Promise<void> {
+         await this.userRepository.deleteUser(id);
      
        
     }
