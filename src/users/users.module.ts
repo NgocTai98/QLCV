@@ -21,21 +21,21 @@ import { PassportModule } from '@nestjs/passport';
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: {
-          expiresIn: '1d',
+        expiresIn: '1d',
       }
-  }),
-  PassportModule.register({
+    }),
+    PassportModule.register({
       defaultStrategy: 'jwt'
-  }),
-   
+    }),
+
   ],
-  providers: [UsersService ],
+  providers: [UsersService],
   controllers: [UsersController],
   exports: [
     TypeOrmModule,
     UsersService,
-    
+
   ]
-  
+
 })
-export class UsersModule {}
+export class UsersModule { }
