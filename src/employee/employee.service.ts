@@ -26,8 +26,8 @@ export class EmployeeService {
         return employeeCredentialsDto;
     }
 
-    async deleteEmployee(id: number) {
-        return await this.employeesRepository.deleteEmployee(id);
+    async deleteEmployee(id: number): Promise<void> {
+        await this.employeesRepository.deleteEmployee(id);
     }
 
     async updateEmployee(id: number, employeeCredentialsDto: EmployeeCredentialsDto, token: string) {

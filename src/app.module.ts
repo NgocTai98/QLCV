@@ -6,6 +6,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EmployeeModule } from './employee/employee.module';
+import { QuanlificationModule } from './quanlification/quanlification.module';
 
 
 
@@ -18,7 +19,8 @@ import { EmployeeModule } from './employee/employee.module';
     // UsersModule,
      forwardRef(() => UsersModule),
     AuthModule,
-    EmployeeModule
+    EmployeeModule,
+    QuanlificationModule
   ],
   controllers: [AppController],
   providers: [AppService],
