@@ -6,7 +6,7 @@ import { InternalServerErrorException } from '@nestjs/common'
 @EntityRepository(Employee)
 export class EmployeesRepository extends Repository<Employee> {
     async getEmployee() {
-        let employees = await this.find({ select: ["employeeCode", "name", "reference", "user"], relations: ["user"] });
+        let employees = await this.find({ select: ["employeeCode", "name", "reference", "user"], relations: ["user", "quanlifications"] });
         return employees;
     }
     async createEmployee(employeeCredentialsDto: EmployeeCredentialsDto, id: any) {
@@ -24,8 +24,9 @@ export class EmployeesRepository extends Repository<Employee> {
         }
     }
 
-    async deleteEmployee(id: number): Promise<void> {
-        await this.delete(id);
+    async deleteEmployee(id: number) {
+        
+        return await this.delete(id);
     }
     async updateEmployee(id: number, employeeCredentialsDto: EmployeeCredentialsDto, userId: any) {
         const { employeeCode, name, reference } = employeeCredentialsDto;

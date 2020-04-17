@@ -1,5 +1,7 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Users } from 'src/users/user.entity';
+import { type } from 'os';
+import { Quanlification } from '../quanlification/quanlification.entity';
 
 
 @Entity()
@@ -22,6 +24,9 @@ export class Employee extends BaseEntity {
     @ManyToOne(type => Users, user => user.employees)
     @JoinColumn({name: "lastEditedBy"})
     user: Users
+
+    @OneToMany(type => Quanlification, quanlification => quanlification.employee)
+    quanlifications: Quanlification[]
 
     
 

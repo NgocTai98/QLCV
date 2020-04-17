@@ -2,6 +2,7 @@ import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, Unique, ManyToOne, 
 import * as bcrypt from 'bcrypt'
 import { type } from 'os';
 import { Employee } from 'src/employee/employee.entity';
+import { Quanlification } from '../quanlification/quanlification.entity';
 
 @Entity()
 @Unique(['email'])
@@ -24,6 +25,9 @@ export class Users extends BaseEntity {
 
     @OneToMany(type => Employee, employee => employee.user)
     employees: Employee[];
+
+    @OneToMany(type => Quanlification, quanlification => quanlification.user)
+    quanlifications: Quanlification[]
     
 
 
