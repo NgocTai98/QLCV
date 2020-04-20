@@ -10,7 +10,7 @@ import { UserCredentialsDto } from "./dto/user-credentials.dto";
 @EntityRepository(Users)
 export class UserRepository extends Repository<Users> {
     async signUp(authCredentialsDto: AuthCredentialsDto) {
-        const { email, password, fullname, lastEditedBy } = authCredentialsDto;
+        const { email, password, fullname } = authCredentialsDto;
 
         const salt = await bcrypt.genSalt();
 
@@ -20,7 +20,7 @@ export class UserRepository extends Repository<Users> {
         user.password = await this.hashPassword(password, salt);
 
         user.fullname = fullname;
-        user.lastEditedBy = lastEditedBy;
+       
 
 
         try {
@@ -65,7 +65,7 @@ export class UserRepository extends Repository<Users> {
         const salt = await bcrypt.genSalt();
         newUser.password = await this.hashPassword(password, salt);
         newUser.fullname = fullname;
-        newUser.lastEditedBy = 1;
+      
 
         try {
             await newUser.save();
@@ -88,7 +88,7 @@ export class UserRepository extends Repository<Users> {
         userUpdate.fullname = fullname;
         const salt = await bcrypt.genSalt();
         userUpdate.password = await this.hashPassword(password, salt);
-        userUpdate.lastEditedBy = userId
+       
         try {
             await userUpdate.save();
         } catch (error) {

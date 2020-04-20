@@ -9,4 +9,7 @@ export const typeOrmConfig:TypeOrmModuleOptions = {
     database: 'qlcv',
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     synchronize: true,
+    migrations: [
+        "src/migration/**/*.ts"
+     ],
 }

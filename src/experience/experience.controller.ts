@@ -61,9 +61,11 @@ export class ExperienceController {
 
     @Delete(':id/experience/:idEx')
     @UseGuards(AuthGuard('jwt'))
-    async deleteExperience(@Param() param: any, @Response() res: any) {
+    async deleteExperience(@Param() param: any, @Response() res: any, @Request() req: any) {
         try {
-            await this.ExperienceService.deleteExxperience(param.id, param.idEx);
+            let parts = req.headers.authorization.split(" ");
+            let token = parts[1];
+            await this.ExperienceService.deleteExxperience(param.id, param.idEx, token);
             return res.json({
                 message: "Đã xóa thành công"
             })

@@ -15,7 +15,6 @@ export class UserCredentialsDto {
     // @MinLength(4)
     // @MaxLength(50)
     fullname?: string;
-    // @IsNumber()
-    lastEditedBy?: number;
+   
  
 }

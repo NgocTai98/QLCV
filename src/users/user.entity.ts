@@ -5,6 +5,8 @@ import { Employee } from 'src/employee/employee.entity';
 import { Quanlification } from '../quanlification/quanlification.entity';
 import { Experience } from 'src/experience/experience.entity';
 import { Education } from 'src/education/education.entity';
+import { Project } from 'src/project/project.entity';
+import { Title } from 'src/title/title.entity';
 
 @Entity()
 @Unique(['email'])
@@ -22,8 +24,7 @@ export class Users extends BaseEntity {
     @Column({ length: 255 }) 
     fullname:string;
 
-    @Column()
-    lastEditedBy: Number
+   
 
     @OneToMany(type => Employee, employee => employee.user)
     employees: Employee[];
@@ -36,6 +37,12 @@ export class Users extends BaseEntity {
 
     @OneToMany(type => Education, education => education.user)
     educations: Education[]
+
+    @OneToMany(type => Project, project => project.user)
+    projects: Project[]
+
+    @OneToMany(type => Title, title => title.user)
+    titles: Title[]
     
 
     async validatePassword(password: string): Promise<boolean> {

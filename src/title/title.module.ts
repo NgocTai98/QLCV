@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import { EmployeeService } from './employee.service';
-import { EmployeeController } from './employee.controller';
+import { TitleService } from './title.service';
+import { TitleController } from './title.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EmployeesRepository } from './employees.repository';
-import { Employee } from './employee.entity';
+import { TitleRepository } from './title.repository';
+import { Title } from './title.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([EmployeesRepository]),
-    TypeOrmModule.forFeature([Employee]),
+    TypeOrmModule.forFeature([TitleRepository]),
+    TypeOrmModule.forFeature([Title]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: {
@@ -22,8 +22,7 @@ import { PassportModule } from '@nestjs/passport';
       defaultStrategy: 'jwt'
     }),
   ],
-  providers: [EmployeeService],
-  controllers: [EmployeeController],
-  exports: [EmployeeService]
+  providers: [TitleService],
+  controllers: [TitleController]
 })
-export class EmployeeModule { }
+export class TitleModule {}

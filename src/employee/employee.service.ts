@@ -37,4 +37,9 @@ export class EmployeeService {
         return employeeCredentialsDto;
     }
 
+    async findOneEmployee(id: number){
+       
+        return await this.employeesRepository.findOneEmployee(id);
+    }
+
 }
