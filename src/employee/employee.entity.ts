@@ -2,6 +2,7 @@ import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColu
 import { Users } from 'src/users/user.entity';
 import { type } from 'os';
 import { Quanlification } from '../quanlification/quanlification.entity';
+import { Experience } from 'src/experience/experience.entity';
 
 
 @Entity()
@@ -27,6 +28,9 @@ export class Employee extends BaseEntity {
 
     @OneToMany(type => Quanlification, quanlification => quanlification.employee)
     quanlifications: Quanlification[]
+
+    @OneToMany(type => Experience, experience => experience.employee)
+    experiences: Experience[]
 
     
 
