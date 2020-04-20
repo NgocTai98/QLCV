@@ -63,9 +63,11 @@ export class QuanlificationController {
 
     @Delete(':id/quanlification/quanId')
     @UseGuards(AuthGuard('jwt'))
-    async deleteQuanlification(@Param() param: any, @Response() res: any) {
+    async deleteQuanlification(@Param() param: any, @Response() res: any, @Request() req:any) {
         try {
-            await this.quanlificationService.deleteQuanlification(param.id, param.quanId);
+            let parts = req.headers.authorization.split(' ');
+            let token = parts[1];
+            await this.quanlificationService.deleteQuanlification(param.id, param.quanId, token);
             return res.json({
                 message: "Đã xóa thành công"
             })

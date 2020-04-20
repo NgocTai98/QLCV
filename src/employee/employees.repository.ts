@@ -44,4 +44,8 @@ export class EmployeesRepository extends Repository<Employee> {
         }
 
     }
+
+    async findOneEmployee(id: number){
+       return await this.findOne(id);
+    }
 }

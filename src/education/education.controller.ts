@@ -63,9 +63,11 @@ export class EducationController {
 
     @Delete(':id/education/:idEdu')
     @UseGuards(AuthGuard('jwt'))
-    async deleteEducation(@Param() param: any, @Response() res: any) {
+    async deleteEducation(@Param() param: any, @Response() res: any, @Request() req: any) {
         try {
-            await this.EuducationService.deleteEducation(param.idEdu);
+            let parts = req.headers.authorization.split(" ");
+            let token = parts[1];
+            await this.EuducationService.deleteEducation(param.id, param.idEdu, token);
             return res.json({
                 message: "Đã xóa thành công"
             })

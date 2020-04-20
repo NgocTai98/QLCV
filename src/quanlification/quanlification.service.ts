@@ -4,12 +4,14 @@ import { Quanlification } from './quanlification.entity';
 import { QuanlificationRepository } from './quanlification.repository';
 import { QuanlificationCredentialsDto } from './dto/quanlification-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
+import { EmployeeService } from 'src/employee/employee.service';
 
 @Injectable()
 export class QuanlificationService {
     constructor(
         @InjectRepository(Quanlification) private quanlificationRepository: QuanlificationRepository,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private employeeService: EmployeeService
     ) { }
 
     async getQuanlification(): Promise<void> {
@@ -19,16 +21,26 @@ export class QuanlificationService {
     async createQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, token: string) {
         let userId = this.jwtService.verify(token);
         await this.quanlificationRepository.createQuanlification(id, quanlificationCredentials, userId.sub);
+        let employee = await this.employeeService.findOneEmployee(id);
+        employee.user = userId.sub;
+        employee.save();
         return quanlificationCredentials;
     }
 
     async updateQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, quanId: number, token: string ) {
         let userId = this.jwtService.verify(token);
         await this.quanlificationRepository.updateQuanlification(id, quanlificationCredentials, quanId, userId.sub);
+        let employee = await this.employeeService.findOneEmployee(id);
+        employee.user = userId.sub;
+        employee.save();
         return quanlificationCredentials;
     }
 
-    async deleteQuanlification(id: number, quanId: number) {
+    async deleteQuanlification(id: number, quanId: number, token: string) {
+        let userId = this.jwtService.verify(token); 
         await this.quanlificationRepository.deleteQuanlification(id, quanId);
+        let employee = await this.employeeService.findOneEmployee(id);
+        employee.user = userId.sub;
+        employee.save();
     }
 }

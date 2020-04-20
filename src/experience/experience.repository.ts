@@ -22,6 +22,7 @@ export class ExperiencesRepository extends Repository<Experience> {
         newExperience.endTime = endTime;
         newExperience.employee = id;
         newExperience.user = userId;
+
         try {
             await newExperience.save();
         } catch (error) {

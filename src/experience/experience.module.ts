@@ -7,6 +7,7 @@ import { ExperiencesRepository } from './experience.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
 import { PassportModule } from '@nestjs/passport';
+import { EmployeeModule } from 'src/employee/employee.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PassportModule } from '@nestjs/passport';
     PassportModule.register({
       defaultStrategy: 'jwt'
     }),
+    EmployeeModule
   ],
   providers: [ExperienceService],
   controllers: [ExperienceController]

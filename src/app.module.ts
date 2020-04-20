@@ -9,6 +9,8 @@ import { EmployeeModule } from './employee/employee.module';
 import { QuanlificationModule } from './quanlification/quanlification.module';
 import { ExperienceModule } from './experience/experience.module';
 import { EducationModule } from './education/education.module';
+import { ProjectModule } from './project/project.module';
+import { TitleModule } from './title/title.module';
 
 
 
@@ -24,7 +26,9 @@ import { EducationModule } from './education/education.module';
     EmployeeModule,
     QuanlificationModule,
     ExperienceModule,
-    EducationModule
+    EducationModule,
+    ProjectModule,
+    TitleModule
   ],
   controllers: [AppController],
   providers: [AppService],
