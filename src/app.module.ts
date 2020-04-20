@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EmployeeModule } from './employee/employee.module';
 import { QuanlificationModule } from './quanlification/quanlification.module';
+import { ExperienceModule } from './experience/experience.module';
 
 
 
@@ -20,7 +21,8 @@ import { QuanlificationModule } from './quanlification/quanlification.module';
      forwardRef(() => UsersModule),
     AuthModule,
     EmployeeModule,
-    QuanlificationModule
+    QuanlificationModule,
+    ExperienceModule
   ],
   controllers: [AppController],
   providers: [AppService],

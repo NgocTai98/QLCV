@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt'
 import { type } from 'os';
 import { Employee } from 'src/employee/employee.entity';
 import { Quanlification } from '../quanlification/quanlification.entity';
+import { Experience } from 'src/experience/experience.entity';
 
 @Entity()
 @Unique(['email'])
@@ -29,7 +30,9 @@ export class Users extends BaseEntity {
     @OneToMany(type => Quanlification, quanlification => quanlification.user)
     quanlifications: Quanlification[]
     
-
+    @OneToMany(type => Experience, experience => experience.user)
+    experiences: Experience[]
+    
 
     async validatePassword(password: string): Promise<boolean> {
         const hash = await bcrypt.compare(password,this.password);
