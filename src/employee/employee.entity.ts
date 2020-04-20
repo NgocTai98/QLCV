@@ -3,6 +3,7 @@ import { Users } from 'src/users/user.entity';
 import { type } from 'os';
 import { Quanlification } from '../quanlification/quanlification.entity';
 import { Experience } from 'src/experience/experience.entity';
+import { Education } from 'src/education/education.entity';
 
 
 @Entity()
@@ -31,6 +32,9 @@ export class Employee extends BaseEntity {
 
     @OneToMany(type => Experience, experience => experience.employee)
     experiences: Experience[]
+
+    @OneToMany(type => Education, education => education.employee)
+    educations: Education[]
 
     
 
