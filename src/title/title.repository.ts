@@ -6,7 +6,11 @@ import { InternalServerErrorException } from "@nestjs/common";
 @EntityRepository(Title)
 export class TitleRepository extends Repository<Title> {
     async getTitle() {
-        return await this.find({ select: ["companyName", "address", "linkWeb", "phone"], relations: ["user"] });
+        return await this.find({
+            select: ["companyName", "address", "linkWeb", "phone"],
+            relations: ["user"],
+            
+        });
     }
 
     async createTitle(titleCredentialsDto: TitleCredentialsDto, userId: any) {

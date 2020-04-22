@@ -6,9 +6,9 @@ import { InternalServerErrorException } from "@nestjs/common";
 @EntityRepository(Experience)
 export class ExperiencesRepository extends Repository<Experience> {
     
-    async getExperience() {
+    async getExperience(id: any) {
        
-       return await this.find({select: ["location", "startTime", "endTime"]});
+       return await this.find({select: ["location", "startTime", "endTime"], relations: ["user", "employee"], where: [{employee: id}]});
     }
 
     async createExperience(id: any, experienceCredentialsDto: ExperienceCredentialsDto, userId: any) {

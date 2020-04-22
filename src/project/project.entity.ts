@@ -1,6 +1,7 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { type } from "os";
 import { Users } from "src/users/user.entity";
+import { Cvproject } from "src/cvproject/cvproject.entity";
 
 @Entity()
 export class Project extends BaseEntity {
@@ -24,4 +25,7 @@ export class Project extends BaseEntity {
 
     @ManyToOne(type => Users, user => user.projects)
     user: Users
+
+    @OneToMany(type => Cvproject, cvproject => cvproject.project)
+    cvprojects: Cvproject
 }

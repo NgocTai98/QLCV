@@ -32,24 +32,25 @@ export class UsersService {
         }
         return user;
     }
-    async createUser(userCredentialsDto: UserCredentialsDto): Promise<void> {
-        return await this.userRepository.createUser(userCredentialsDto);
+    async createUser(userCredentialsDto: UserCredentialsDto) {
+        await this.userRepository.createUser(userCredentialsDto);
+        return userCredentialsDto;
 
     }
     async updateUser(id: number, userCredentialsDto: UserCredentialsDto, token: string): Promise<Users> {
         let userId = this.jwtService.verify(token);
-       
+
         await this.userRepository.updateUser(id, userCredentialsDto, userId.sub);
-        let user = await this.usersRepository.findOne(id, {select: ['email', 'password', 'fullname']});
+        let user = await this.usersRepository.findOne(id, { select: ['email', 'password', 'fullname'] });
         if (!user) {
-            throw new HttpException('Không thể sửa',400);
+            throw new HttpException('Không thể sửa', 400);
         }
         return user;
     }
 
     async deleteUser(id: number): Promise<void> {
-         await this.userRepository.deleteUser(id);
-     
-       
+        await this.userRepository.deleteUser(id);
+
+
     }
 }

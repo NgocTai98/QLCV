@@ -1,0 +1,47 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { History } from './history.entity';
+import { Repository } from 'typeorm';
+import { HistoryRepository } from './history.repository';
+import { JwtService } from '@nestjs/jwt';
+import * as moment from 'moment'
+import { InternalServerErrorException } from "@nestjs/common";
+
+
+@Injectable()
+export class HistoryService {
+    constructor(
+        @InjectRepository(History) private HistoryRepository: Repository<History>,
+        private historyRepository: HistoryRepository,
+        private jwtService: JwtService
+    ) { }
+
+    async getHistory(id: number) {
+        let history = await this.HistoryRepository.find({ select: ["time"], relations: ["cv", "user"], where: [{ cv: id }] });
+        return history;
+
+    }
+
+    async createHistory(idCv: any, userId: any) {
+        const newHistory = new History();
+        newHistory.time = moment().utc().format();
+        newHistory.cv = idCv;
+        newHistory.user = userId;
+        try {
+            await newHistory.save();
+            return newHistory;
+        } catch (error) {
+            throw new InternalServerErrorException();
+        }
+
+
+    }
+
+    async updateHistory() {
+
+    }
+
+    async deleteHistory() {
+
+    }
+}

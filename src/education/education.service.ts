@@ -16,13 +16,14 @@ export class EducationService {
         private employeeService: EmployeeService
     ) { }
 
-    async getEducation() {
-        await this.educationsRespository.getEducation();
+    async getEducation(id: number) {
+        await this.educationsRespository.getEducation(id);
     }
 
     async createEducation(id: number, educationCredentialsDto: EducationCredentialsDto, token: string) {
         let userId = await this.jwtService.verify(token);
-        await this.educationsRespository.createEducation(id, educationCredentialsDto, userId.sub);
+        let newEdu = await this.educationsRespository.createEducation(id, educationCredentialsDto, userId.sub);
+        
         let employee = await this.employeeService.findOneEmployee(id);
         employee.user = userId.sub;
         employee.save();

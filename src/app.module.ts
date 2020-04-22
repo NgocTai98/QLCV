@@ -11,6 +11,9 @@ import { ExperienceModule } from './experience/experience.module';
 import { EducationModule } from './education/education.module';
 import { ProjectModule } from './project/project.module';
 import { TitleModule } from './title/title.module';
+import { CvModule } from './cv/cv.module';
+import { CvprojectModule } from './cvproject/cvproject.module';
+import { HistoryModule } from './history/history.module';
 
 
 
@@ -28,7 +31,10 @@ import { TitleModule } from './title/title.module';
     ExperienceModule,
     EducationModule,
     ProjectModule,
-    TitleModule
+    TitleModule,
+    CvModule,
+    CvprojectModule,
+    HistoryModule
   ],
   controllers: [AppController],
   providers: [AppService],

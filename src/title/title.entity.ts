@@ -1,6 +1,7 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { type } from "os";
 import { Users } from "src/users/user.entity";
+import { Cv } from "src/cv/cv.entity";
 
 @Entity()
 export class Title extends BaseEntity {
@@ -22,5 +23,8 @@ export class Title extends BaseEntity {
 
     @ManyToOne(type => Users, user => user.titles)
     user: Users
+
+    @OneToMany(type => Cv, cv => cv.title)
+    cvs: Cv[]
 
 }

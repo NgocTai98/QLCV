@@ -11,9 +11,9 @@ export class ExperienceController {
 
     @Get(':id/experience')
     @UseGuards(AuthGuard('jwt'))
-    async getExperience(@Response() res: any) {
+    async getExperience(@Response() res: any, @Param() param: any) {
         try {
-            let experience = await this.ExperienceService.getExperience();
+            let experience = await this.ExperienceService.getExperience(param.id);
             return res.json({
                 message: "Danh sách experience",
                 data: experience

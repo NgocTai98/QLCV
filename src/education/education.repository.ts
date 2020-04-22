@@ -6,12 +6,13 @@ import { InternalServerErrorException } from "@nestjs/common";
 @EntityRepository(Education)
 export class EducationsRepository extends Repository<Education> {
 
-    async getEducation() {
-        return await this.find({ select: ["location", "startTime", "endTime"] });
+    async getEducation(id: any) {
+        return await this.find({ select: ["location", "startTime", "endTime"], relations: ["user", "employee"], where: [{employee: id}] });
     }
 
     async createEducation(id: any, educationCredenntialsDto: EducationCredentialsDto, userId: any) {
         const { location, startTime, endTime } = educationCredenntialsDto;
+        
         const newEdu = new Education();
         newEdu.location = location;
         newEdu.startTime = startTime;
@@ -21,6 +22,7 @@ export class EducationsRepository extends Repository<Education> {
 
         try {
             await newEdu.save();
+            
         } catch (error) {
             throw new InternalServerErrorException();
         }

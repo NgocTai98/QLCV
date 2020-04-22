@@ -4,6 +4,7 @@ import { type } from 'os';
 import { Quanlification } from '../quanlification/quanlification.entity';
 import { Experience } from 'src/experience/experience.entity';
 import { Education } from 'src/education/education.entity';
+import { Cv } from 'src/cv/cv.entity';
 
 
 @Entity()
@@ -35,6 +36,9 @@ export class Employee extends BaseEntity {
 
     @OneToMany(type => Education, education => education.employee)
     educations: Education[]
+
+    @OneToMany(type => Cv, cv => cv.employee)
+    cvs: Cv[]
 
     
 

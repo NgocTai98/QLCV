@@ -14,7 +14,7 @@ export class QuanlificationController {
     async getQuanlification(@Response() res: any, @Param() param) {
         try {
            
-            let quan = await this.quanlificationService.getQuanlification();
+            let quan = await this.quanlificationService.getQuanlification(param.id);
             return res.json({
                 message: "Danh sach quanlification",
                 data: quan
