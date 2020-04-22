@@ -11,9 +11,9 @@ export class EducationController {
 
     @Get(':id/education')
     @UseGuards(AuthGuard('jwt'))
-    async getEducation(@Response() res: any) {
+    async getEducation(@Response() res: any, @Param() param: any) {
         try {
-            let edu = await this.EuducationService.getEducation();
+            let edu = await this.EuducationService.getEducation(param.id);
             return res.json({
                 message: "Danh sách education"
             })

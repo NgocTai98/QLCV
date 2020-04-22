@@ -7,6 +7,7 @@ import { Experience } from 'src/experience/experience.entity';
 import { Education } from 'src/education/education.entity';
 import { Project } from 'src/project/project.entity';
 import { Title } from 'src/title/title.entity';
+import { History } from 'src/history/history.entity';
 
 @Entity()
 @Unique(['email'])
@@ -43,6 +44,9 @@ export class Users extends BaseEntity {
 
     @OneToMany(type => Title, title => title.user)
     titles: Title[]
+
+    @OneToMany(type => History, history => history.user)
+    histories: History[]
     
 
     async validatePassword(password: string): Promise<boolean> {

@@ -16,9 +16,9 @@ export class ExperienceService {
         private employeeService: EmployeeService
     ) { }
 
-    async getExperience() {
+    async getExperience(id: number) {
        
-       return await this.ExperiencesRepository.getExperience();
+       return await this.ExperiencesRepository.getExperience(id);
     }
 
     async createExperience(id: any, experienceCredentialsDto: ExperienceCredentialsDto, token: string) {

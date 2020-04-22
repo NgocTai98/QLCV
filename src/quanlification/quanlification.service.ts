@@ -14,8 +14,8 @@ export class QuanlificationService {
         private employeeService: EmployeeService
     ) { }
 
-    async getQuanlification(): Promise<void> {
-        await this.quanlificationRepository.getQuanlification();
+    async getQuanlification(id: number) {
+        return await this.quanlificationRepository.getQuanlification(id);
     }
 
     async createQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, token: string) {

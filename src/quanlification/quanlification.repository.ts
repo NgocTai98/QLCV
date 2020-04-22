@@ -6,13 +6,19 @@ import { InternalServerErrorException } from "@nestjs/common";
 @EntityRepository(Quanlification)
 export class QuanlificationRepository extends Repository<Quanlification> {
 
-    async getQuanlification(): Promise<void> {
-       await this.find({select: ["name", "employee", "user"]});
-       
+    async getQuanlification(id: any) {
+         return  await this.find({select: ["name"], relations: ["employee", "user"], where:[{employee: id}]});
+        // return await this.createQueryBuilder("quanlification")
+        // .select("quanlification.name")
+        // .leftJoinAndSelect("quanlification.employee", "employee")
+        // .leftJoinAndSelect("quanlification.user", "user")
+        // .where("quanlification.employee = :id", {id: id})
+        // .getMany();
+
     }
 
     async createQuanlification(idEm: any, quanlificationCredentials: QuanlificationCredentialsDto, userId: any) {
-        const {name} = quanlificationCredentials;
+        const { name } = quanlificationCredentials;
         const quan = new Quanlification();
         quan.name = name;
         quan.employee = idEm;
@@ -26,7 +32,7 @@ export class QuanlificationRepository extends Repository<Quanlification> {
     }
 
     async updateQuanlification(id: any, quanlificationCredentials: QuanlificationCredentialsDto, quanId: number, userId: any) {
-        const {name} = quanlificationCredentials;
+        const { name } = quanlificationCredentials;
         const updateQuan = await this.findOne(quanId);
         updateQuan.name = name;
         updateQuan.employee = id;
