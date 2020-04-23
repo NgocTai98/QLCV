@@ -9,23 +9,20 @@ import { UserCredentialsDto } from "./dto/user-credentials.dto";
 
 @EntityRepository(Users)
 export class UserRepository extends Repository<Users> {
-    async signUp(authCredentialsDto: AuthCredentialsDto) {
+    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<Users> {
         const { email, password, fullname } = authCredentialsDto;
 
         const salt = await bcrypt.genSalt();
-
 
         const user = new Users();
         user.email = email;
         user.password = await this.hashPassword(password, salt);
 
         user.fullname = fullname;
-       
-
 
         try {
             await user.save();
-
+            return user;
         } catch (error) {
             if (error.code === '23505') {
                 throw new ConflictException('email already exists');
@@ -36,7 +33,7 @@ export class UserRepository extends Repository<Users> {
 
     }
 
-    async validateUserPassword(authCredentialsDto: AuthCredentialsDto) {
+    async validateUserPassword(authCredentialsDto: AuthCredentialsDto): Promise<Users> {
         const { email, password } = authCredentialsDto;
         const user = await this.findOne({ email });
 
@@ -51,36 +48,30 @@ export class UserRepository extends Repository<Users> {
         return bcrypt.hash(password, salt);
     }
 
-    async getUsers() {
+    async getUsers(): Promise<Users[]> {
 
         let users = await this.find({ select: ['email', 'fullname'] });
 
         return users;
 
     }
-    async createUser(userCredentialsDto: UserCredentialsDto) {
+    async createUser(userCredentialsDto: UserCredentialsDto): Promise<Users> {
         const { email, password, fullname } = userCredentialsDto;
         const newUser = new Users();
         newUser.email = email;
         const salt = await bcrypt.genSalt();
         newUser.password = await this.hashPassword(password, salt);
         newUser.fullname = fullname;
-      
 
         try {
             await newUser.save();
-
+            return newUser;
         } catch (error) {
-
-            if (error.code === '23505') {
-                throw new ConflictException('email already exists');
-            } else {
-                throw new InternalServerErrorException();
-            }
+            throw new InternalServerErrorException();
         }
     }
 
-    async updateUser(id: number, userCredentialsDto: UserCredentialsDto, userId: number) {
+    async updateUser(id: number, userCredentialsDto: UserCredentialsDto, userId: number): Promise<Users> {
         const { email, password, fullname } = userCredentialsDto;
         const userUpdate = await this.findOne(id);
 
@@ -88,16 +79,20 @@ export class UserRepository extends Repository<Users> {
         userUpdate.fullname = fullname;
         const salt = await bcrypt.genSalt();
         userUpdate.password = await this.hashPassword(password, salt);
-       
+
         try {
             await userUpdate.save();
+            return userUpdate;
         } catch (error) {
             throw new InternalServerErrorException();
         }
 
-
     }
-    async deleteUser(id: number) {
-        return this.delete(id);
+    async deleteUser(id: number): Promise<void> {
+        await this.delete(id);
+    }
+
+    async getUser(id: number): Promise<Users> {
+        return await this.findOne({ where: { id: id } });
     }
 }

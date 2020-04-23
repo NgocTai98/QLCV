@@ -23,29 +23,21 @@ export class UsersService {
         return await this.userRepository.getUsers();
     }
 
-    async getUser(_id: number): Promise<Users[]> {
-        let user = await this.usersRepository.find({
-            where: [{ "id": _id }]
-        });
-        if (user.length == 0) {
-            throw new HttpException('not user exist', 404);
-        }
+    async getUser(id: number): Promise<Users> {
+        let user = await this.userRepository.getUser(id);
         return user;
+
     }
-    async createUser(userCredentialsDto: UserCredentialsDto) {
-        await this.userRepository.createUser(userCredentialsDto);
-        return userCredentialsDto;
+    async createUser(userCredentialsDto: UserCredentialsDto): Promise<Users> {
+        let newUser = await this.userRepository.createUser(userCredentialsDto);
+        return newUser;
 
     }
     async updateUser(id: number, userCredentialsDto: UserCredentialsDto, token: string): Promise<Users> {
         let userId = this.jwtService.verify(token);
 
-        await this.userRepository.updateUser(id, userCredentialsDto, userId.sub);
-        let user = await this.usersRepository.findOne(id, { select: ['email', 'password', 'fullname'] });
-        if (!user) {
-            throw new HttpException('Không thể sửa', 400);
-        }
-        return user;
+        let updateUser = await this.userRepository.updateUser(id, userCredentialsDto, userId.sub);
+        return updateUser;
     }
 
     async deleteUser(id: number): Promise<void> {

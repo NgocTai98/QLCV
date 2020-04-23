@@ -14,31 +14,31 @@ export class EmployeeService {
         private jwtService: JwtService
     ) { }
 
-    async getEmployee() {
+    async getEmployee(): Promise<Employee[]> {
 
         return await this.employeesRepository.getEmployee();
     }
 
-    async createEmployee(employeeCredentialsDto: EmployeeCredentialsDto, token: string) {
+    async createEmployee(employeeCredentialsDto: EmployeeCredentialsDto, token: string): Promise<Employee> {
         let userId = this.jwtService.verify(token);
-       
-        await this.employeesRepository.createEmployee(employeeCredentialsDto, userId.sub);
-        return employeeCredentialsDto;
+
+        let newEm = await this.employeesRepository.createEmployee(employeeCredentialsDto, userId.sub);
+        return newEm;
     }
 
     async deleteEmployee(id: number): Promise<void> {
         await this.employeesRepository.deleteEmployee(id);
     }
 
-    async updateEmployee(id: number, employeeCredentialsDto: EmployeeCredentialsDto, token: string) {
+    async updateEmployee(id: number, employeeCredentialsDto: EmployeeCredentialsDto, token: string): Promise<Employee> {
         let userId = this.jwtService.verify(token);
-       
-        await this.employeesRepository.updateEmployee(id, employeeCredentialsDto, userId.sub);
-        return employeeCredentialsDto;
+
+        let updateEm = await this.employeesRepository.updateEmployee(id, employeeCredentialsDto, userId.sub);
+        return updateEm;
     }
 
-    async findOneEmployee(id: number){
-       
+    async findOneEmployee(id: number): Promise<Employee> {
+
         return await this.employeesRepository.findOneEmployee(id);
     }
 

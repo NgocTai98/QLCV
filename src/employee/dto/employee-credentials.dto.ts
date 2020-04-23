@@ -12,7 +12,7 @@ export class EmployeeCredentialsDto {
     @MaxLength(50)
     name: string;
 
-
-    reference?: string;
-    user?: number;
+    @IsString()
+    reference: string;
+   
 }

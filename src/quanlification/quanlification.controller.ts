@@ -11,7 +11,7 @@ export class QuanlificationController {
 
     @Get(':id/quanlification')
     @UseGuards(AuthGuard('jwt'))
-    async getQuanlification(@Response() res: any, @Param() param) {
+    async getQuanlification(@Response() res: any, @Param() param: any) {
         try {
            
             let quan = await this.quanlificationService.getQuanlification(param.id);

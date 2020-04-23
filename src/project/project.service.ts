@@ -14,23 +14,23 @@ export class ProjectService {
         private jwtService: JwtService
     ) { }
 
-    async getProject() {
+    async getProject(): Promise<Project[]> {
        return await this.projectsRepository.getProject();
     }
 
-    async createProject(projectCredentialsDto: ProjectCredentialsDto, token: string) {
+    async createProject(projectCredentialsDto: ProjectCredentialsDto, token: string): Promise<Project> {
         let userId = await this.jwtService.verify(token);
-        await this.projectsRepository.createProject(projectCredentialsDto, userId.sub);
-        return projectCredentialsDto;
+        let newPro = await this.projectsRepository.createProject(projectCredentialsDto, userId.sub);
+        return newPro;
     }
 
-    async updateProject(id: number, projectCredentialsDto: ProjectCredentialsDto, token: string) {
+    async updateProject(id: number, projectCredentialsDto: ProjectCredentialsDto, token: string): Promise<Project> {
         let userId = await this.jwtService.verify(token);
-        await this.projectsRepository.updateProject(id, projectCredentialsDto, userId.sub);
-        return projectCredentialsDto;
+        let updatePro = await this.projectsRepository.updateProject(id, projectCredentialsDto, userId.sub);
+        return updatePro;
     }
 
-    async deleteProject(id: number) {
+    async deleteProject(id: number): Promise<void> {
         await this.projectsRepository.deleteProject(id);
     }
 }

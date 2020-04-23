@@ -6,13 +6,20 @@ import { InternalServerErrorException } from "@nestjs/common";
 @EntityRepository(Education)
 export class EducationsRepository extends Repository<Education> {
 
-    async getEducation(id: any) {
-        return await this.find({ select: ["location", "startTime", "endTime"], relations: ["user", "employee"], where: [{employee: id}] });
+    async getEducation(id: any): Promise<Education[]> {
+        let getEdu = await this.find({ select: ["location", "startTime", "endTime"], relations: ["user", "employee"], where: [{ employee: id }] });
+        getEdu.forEach(element => {
+            delete element.user.id;
+            delete element.user.password;
+            delete element.employee.id;
+            delete element.employee.reference;
+        });
+        return getEdu;
     }
 
-    async createEducation(id: any, educationCredenntialsDto: EducationCredentialsDto, userId: any) {
+    async createEducation(id: any, educationCredenntialsDto: EducationCredentialsDto, userId: any): Promise<Education> {
         const { location, startTime, endTime } = educationCredenntialsDto;
-        
+
         const newEdu = new Education();
         newEdu.location = location;
         newEdu.startTime = startTime;
@@ -22,13 +29,13 @@ export class EducationsRepository extends Repository<Education> {
 
         try {
             await newEdu.save();
-            
+            return newEdu;
         } catch (error) {
             throw new InternalServerErrorException();
         }
     }
 
-    async updateEducation(id: any, educationCredenntialsDto: EducationCredentialsDto, idEdu: any, userId: any) {
+    async updateEducation(id: any, educationCredenntialsDto: EducationCredentialsDto, idEdu: any, userId: any): Promise<Education> {
         const { location, startTime, endTime } = educationCredenntialsDto;
         const updateEdu = await this.findOne(idEdu);
         updateEdu.location = location;
@@ -38,13 +45,14 @@ export class EducationsRepository extends Repository<Education> {
         updateEdu.user = userId;
         try {
             await updateEdu.save();
+            return updateEdu;
         } catch (error) {
             throw new InternalServerErrorException();
         }
     }
 
-    async deleteEducation(idEdu: number) {
-        return await this.delete(idEdu);
+    async deleteEducation(idEdu: number): Promise<void> {
+        await this.delete(idEdu);
     }
 
 }

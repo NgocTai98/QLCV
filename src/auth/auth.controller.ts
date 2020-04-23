@@ -14,7 +14,7 @@ export class AuthController {
     @Post('/signup')
     async signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res, @Request() req): Promise<void> {
         try {
-            
+
             let newUser = await this.authService.signUp(authCredentialsDto);
 
             return res.json({
@@ -31,7 +31,7 @@ export class AuthController {
     }
 
     @Post('/signin')
-    async signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res) {
+    async signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res: any) {
         try {
             let user = await this.authService.signIn(authCredentialsDto);
 
@@ -53,29 +53,28 @@ export class AuthController {
     async googleLogin() {
         // initiates the Google OAuth2 login flow
         // return await this.authService.validateOAuthLogin('s', Provider);
-       
-        
+
+
     }
 
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
-    async googleLoginCallback(@Request() req, @Response() res) {
+    async googleLoginCallback(@Request() req, @Response() res: any) {
         // handles the Google OAuth2 callback
         const jwt: string = await req.user.jwt;
-        
+
         if (jwt) {
             res.redirect('http://localhost:3000');
         } else {
             res.redirect('http://localhost:3000/auth/google');
         }
-            
-            
+
+
     }
 
     @Get('protected')
     @UseGuards(AuthGuard('jwt'))
-    protectedResource()
-    {
+    protectedResource() {
         return 'JWT is working!';
     }
 

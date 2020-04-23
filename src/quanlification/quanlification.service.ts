@@ -14,29 +14,29 @@ export class QuanlificationService {
         private employeeService: EmployeeService
     ) { }
 
-    async getQuanlification(id: number) {
+    async getQuanlification(id: number): Promise<Quanlification[]> {
         return await this.quanlificationRepository.getQuanlification(id);
     }
 
-    async createQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, token: string) {
+    async createQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, token: string): Promise<Quanlification> {
         let userId = this.jwtService.verify(token);
-        await this.quanlificationRepository.createQuanlification(id, quanlificationCredentials, userId.sub);
+        let newQuan = await this.quanlificationRepository.createQuanlification(id, quanlificationCredentials, userId.sub);
         let employee = await this.employeeService.findOneEmployee(id);
         employee.user = userId.sub;
         employee.save();
-        return quanlificationCredentials;
+        return newQuan;
     }
 
-    async updateQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, quanId: number, token: string ) {
+    async updateQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, quanId: number, token: string ): Promise<Quanlification> {
         let userId = this.jwtService.verify(token);
-        await this.quanlificationRepository.updateQuanlification(id, quanlificationCredentials, quanId, userId.sub);
+        let updateQuan = await this.quanlificationRepository.updateQuanlification(id, quanlificationCredentials, quanId, userId.sub);
         let employee = await this.employeeService.findOneEmployee(id);
         employee.user = userId.sub;
         employee.save();
-        return quanlificationCredentials;
+        return updateQuan;
     }
 
-    async deleteQuanlification(id: number, quanId: number, token: string) {
+    async deleteQuanlification(id: number, quanId: number, token: string): Promise<void> {
         let userId = this.jwtService.verify(token); 
         await this.quanlificationRepository.deleteQuanlification(id, quanId);
         let employee = await this.employeeService.findOneEmployee(id);

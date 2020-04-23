@@ -1,7 +1,7 @@
-import { IsDate } from "class-validator";
+import { IsString } from "class-validator";
 
 export class HistoryCredentialsDto {
 
-    @IsDate()
+    @IsString()
     time: string
 }

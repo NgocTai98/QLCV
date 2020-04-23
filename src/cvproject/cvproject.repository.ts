@@ -23,11 +23,17 @@ export class CvProjectRepository extends Repository<Cvproject> {
                 getCvProjects.push(item);
             }
         });
+
+        array.forEach(element => {
+            delete element.cv.id;
+            delete element.project.id;
+        });
+
         return getCvProjects;
 
     }
 
-    async createCvProject(id: any, cvProjectCredentialsDto: CvProjectCredentialsDto) {
+    async createCvProject(id: any, cvProjectCredentialsDto: CvProjectCredentialsDto): Promise<Cvproject> {
         const { responsibility, technology, projectId } = cvProjectCredentialsDto;
         const newCvpro = new Cvproject();
         newCvpro.responsibility = responsibility;
@@ -42,8 +48,8 @@ export class CvProjectRepository extends Repository<Cvproject> {
         }
     }
 
-    async updateCvProject(id: any, cvProjectCredentialsDto: CvProjectCredentialsDto, idCvpro: number) {
-        const { responsibility, technology} = cvProjectCredentialsDto;
+    async updateCvProject(id: any, cvProjectCredentialsDto: CvProjectCredentialsDto, idCvpro: number): Promise<Cvproject> {
+        const { responsibility, technology } = cvProjectCredentialsDto;
         const updateCvpro = await this.findOne(idCvpro);
         updateCvpro.responsibility = responsibility;
         updateCvpro.technology = technology;
@@ -56,7 +62,7 @@ export class CvProjectRepository extends Repository<Cvproject> {
         }
     }
 
-    async deleteCvProject(id: any, idCvpro: number) {
-        return await this.delete(idCvpro);
+    async deleteCvProject(id: any, idCvpro: number): Promise<void> {
+        await this.delete(idCvpro);
     }
 }

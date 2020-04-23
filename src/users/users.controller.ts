@@ -70,7 +70,7 @@ export class UsersController {
 
     @Put(':id')
     @UseGuards(AuthGuard('jwt'))
-    async update(@Param() Params, @Body(ValidationPipe) userCredentialsDto: UserCredentialsDto, @Response() res: any, @Request() req: any) {
+    async update(@Param() Params: any, @Body(ValidationPipe) userCredentialsDto: UserCredentialsDto, @Response() res: any, @Request() req: any) {
         try {
            
             let parts = req.headers.authorization.split(' ');

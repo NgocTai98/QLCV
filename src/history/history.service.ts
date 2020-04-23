@@ -16,13 +16,18 @@ export class HistoryService {
         private jwtService: JwtService
     ) { }
 
-    async getHistory(id: number) {
+    async getHistory(id: number): Promise<History[]> {
         let history = await this.HistoryRepository.find({ select: ["time"], relations: ["cv", "user"], where: [{ cv: id }] });
+        history.forEach(element => {
+            delete element.cv.id;
+            delete element.user.id;
+            delete element.user.password;
+        });
         return history;
 
     }
 
-    async createHistory(idCv: any, userId: any) {
+    async createHistory(idCv: any, userId: any): Promise<History> {
         const newHistory = new History();
         newHistory.time = moment().utc().format();
         newHistory.cv = idCv;

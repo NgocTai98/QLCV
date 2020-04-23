@@ -16,30 +16,30 @@ export class EducationService {
         private employeeService: EmployeeService
     ) { }
 
-    async getEducation(id: number) {
-        await this.educationsRespository.getEducation(id);
+    async getEducation(id: number): Promise<Education[]> {
+        return await this.educationsRespository.getEducation(id);
     }
 
-    async createEducation(id: number, educationCredentialsDto: EducationCredentialsDto, token: string) {
+    async createEducation(id: number, educationCredentialsDto: EducationCredentialsDto, token: string): Promise<Education> {
         let userId = await this.jwtService.verify(token);
         let newEdu = await this.educationsRespository.createEducation(id, educationCredentialsDto, userId.sub);
-        
+
         let employee = await this.employeeService.findOneEmployee(id);
         employee.user = userId.sub;
         employee.save();
-        return educationCredentialsDto;
+        return newEdu;
     }
 
-    async updateEducation(id: number, educationCredentialsDto: EducationCredentialsDto, idEdu: number, token: string) {
+    async updateEducation(id: number, educationCredentialsDto: EducationCredentialsDto, idEdu: number, token: string): Promise<Education> {
         let userId = await this.jwtService.verify(token);
-        await this.educationsRespository.updateEducation(id, educationCredentialsDto, idEdu, userId.sub);
+        let updateEdu = await this.educationsRespository.updateEducation(id, educationCredentialsDto, idEdu, userId.sub);
         let employee = await this.employeeService.findOneEmployee(id);
         employee.user = userId.sub;
         employee.save();
-        return educationCredentialsDto;
+        return updateEdu;
     }
 
-    async deleteEducation(id: number, idEdu: number, token:string) {
+    async deleteEducation(id: number, idEdu: number, token: string): Promise<void> {
         let userId = await this.jwtService.verify(token);
         await this.educationsRespository.deleteEducation(idEdu);
         let employee = await this.employeeService.findOneEmployee(id);

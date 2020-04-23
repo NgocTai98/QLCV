@@ -8,7 +8,6 @@ export class Cvproject extends BaseEntity {
     @PrimaryGeneratedColumn()
     cvprojectId: number
 
-
     @Column()
     responsibility: string
 
