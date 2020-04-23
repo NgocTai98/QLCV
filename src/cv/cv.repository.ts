@@ -6,29 +6,35 @@ import { InternalServerErrorException } from "@nestjs/common";
 
 @EntityRepository(Cv)
 export class CvRepository extends Repository<Cv> {
-    async getCv(id: number) {
-        return await this.find({select: ["hashTag", "createdAt"], relations: ["employee", "title"], where: [{employee: id}]})
+    async getCv(id: number): Promise<Cv[]> {
+        let cv = await this.find({ select: ["hashTag", "createdAt"], relations: ["employee", "title"], where: [{ employee: id }] })
+        cv.forEach(element => {
+            delete element.employee.id;
+            delete element.employee.reference;
+            delete element.title.id;
+        });
+        return cv;
     }
 
-    async createCv(id: any, cvCredentialsDto: CvCredentialsDto) {
-       
-        const {hashTag, titleId} = cvCredentialsDto;
+    async createCv(id: any, cvCredentialsDto: CvCredentialsDto): Promise<Cv> {
+
+        const { hashTag, titleId } = cvCredentialsDto;
         const newCv = new Cv();
         newCv.hashTag = hashTag;
         newCv.createdAt = moment().utc().format();
         newCv.title = titleId;
         newCv.employee = id;
-       
+
         try {
             await newCv.save();
             return newCv;
-                    
+
         } catch (error) {
             throw new InternalServerErrorException();
         }
     }
-    async updateCv(id: any, cvCredentialsDto: CvCredentialsDto, idCv: any) {
-        const {hashTag, titleId} = cvCredentialsDto;
+    async updateCv(id: any, cvCredentialsDto: CvCredentialsDto, idCv: any): Promise<Cv> {
+        const { hashTag, titleId } = cvCredentialsDto;
         const updateCv = await this.findOne(idCv);
 
         updateCv.hashTag = hashTag;
@@ -43,7 +49,7 @@ export class CvRepository extends Repository<Cv> {
         }
     }
 
-    async deleteCv(idCv: number) {
-        return await this.delete(idCv);
+    async deleteCv(idCv: number): Promise<void> {
+        await this.delete(idCv);
     }
 }

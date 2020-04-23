@@ -61,9 +61,11 @@ export class CvController {
 
     @Delete(':id/cv/:idCv')
     @UseGuards(AuthGuard('jwt'))
-    async deleteCv(@Param() param: any, @Response() res: any) {
+    async deleteCv(@Param() param: any, @Response() res: any, @Request() req: any) {
         try {
-            await this.cvService.deleteCv(param.idCv);
+            let parts = req.headers.authorization.split(" ");
+            let token = parts[1];
+            await this.cvService.deleteCv(param.idCv, token);
             return res.json({
                 message: "Đã xóa thành công"
             })

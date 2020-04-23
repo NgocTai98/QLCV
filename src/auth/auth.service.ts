@@ -5,11 +5,11 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { UserRepository } from '../users/user.repository';
 import { sign, verify } from 'jsonwebtoken';
 import { jwtConstants } from './constants';
+import { Users } from 'src/users/user.entity';
 
 
 
-export enum Provider
-{
+export enum Provider {
     GOOGLE = 'google'
 }
 
@@ -18,18 +18,18 @@ export class AuthService {
     constructor(
         @InjectRepository(UserRepository) private usersRepository: UserRepository,
         private jwtService: JwtService,
-        
+
     ) { }
 
 
-    async signUp(authCredentialsDto: AuthCredentialsDto, ) {
-       
-        await this.usersRepository.signUp(authCredentialsDto);
+    async signUp(authCredentialsDto: AuthCredentialsDto, ): Promise<Users> {
 
-        return authCredentialsDto;
+        let newUser = await this.usersRepository.signUp(authCredentialsDto);
+
+        return newUser;
     }
 
-    async signIn(authCredentialsDto: AuthCredentialsDto) {
+    async signIn(authCredentialsDto: AuthCredentialsDto): Promise<(string | Users)[]> {
         let result = await this.usersRepository.validateUserPassword(authCredentialsDto);
 
         if (result != null) {
@@ -42,24 +42,19 @@ export class AuthService {
 
     }
 
-    async validateOAuthLogin(thirdPartyId: string, provider: Provider): Promise<string>
-    {
-        try 
-        {
-            
+    async validateOAuthLogin(thirdPartyId: string, provider: Provider): Promise<string> {
+        try {
             const payload = {
                 thirdPartyId,
                 provider
             }
             const jwt: string = sign(payload, jwtConstants.secret, { expiresIn: '1d' });
-                return jwt;
-            }
-        catch (err)
-        {
-            
+            return jwt;
+        }
+        catch (err) {
             throw new InternalServerErrorException('validateOAuthLogin', err.message);
         }
-   
+
     }
 
 }

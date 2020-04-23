@@ -2,13 +2,12 @@ import { IsString } from "class-validator";
 
 export class ExperienceCredentialsDto {
     @IsString()
-    location?: string;
+    location: string;
 
-    startTime?: string;
+    @IsString()
+    startTime: string;
 
-    endTime?: string;
+    @IsString()
+    endTime: string;
 
-    employee: number;
-    
-    user: number;
 }

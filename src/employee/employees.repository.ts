@@ -5,11 +5,27 @@ import { InternalServerErrorException } from '@nestjs/common'
 
 @EntityRepository(Employee)
 export class EmployeesRepository extends Repository<Employee> {
-    async getEmployee() {
+    async getEmployee(): Promise<Employee[]> {
         let employees = await this.find({ select: ["employeeCode", "name", "reference", "user"], relations: ["user", "quanlifications", "experiences", "educations", "cvs"] });
+        employees.forEach(element => {
+            delete element.user.id;
+            delete element.user.password;
+            element.quanlifications.forEach(e => {
+                delete e.id
+            });
+            element.experiences.forEach(e => {
+                delete e.id
+            });
+            element.educations.forEach(e => {
+                delete e.id
+            });
+            element.cvs.forEach(e => {
+                delete e.id
+            });
+        });
         return employees;
     }
-    async createEmployee(employeeCredentialsDto: EmployeeCredentialsDto, id: any) {
+    async createEmployee(employeeCredentialsDto: EmployeeCredentialsDto, id: any): Promise<Employee> {
         const { employeeCode, name, reference } = employeeCredentialsDto;
         const newEmployee = new Employee();
         newEmployee.employeeCode = employeeCode;
@@ -18,34 +34,36 @@ export class EmployeesRepository extends Repository<Employee> {
         newEmployee.user = id;
         try {
             await newEmployee.save();
+            return newEmployee;
         } catch (error) {
             throw new InternalServerErrorException();
 
         }
     }
 
-    async deleteEmployee(id: number) {
-        
-        return await this.delete(id);
+    async deleteEmployee(id: number): Promise<void> {
+
+        await this.delete(id);
     }
-    async updateEmployee(id: number, employeeCredentialsDto: EmployeeCredentialsDto, userId: any) {
+    async updateEmployee(id: number, employeeCredentialsDto: EmployeeCredentialsDto, userId: any): Promise<Employee> {
         const { employeeCode, name, reference } = employeeCredentialsDto;
-        
+
         const employee = await this.findOne(id);
-       
+
         employee.employeeCode = employeeCode;
         employee.name = name;
         employee.reference = reference;
         employee.user = userId;
         try {
             await employee.save();
+            return employee;
         } catch (error) {
             throw new InternalServerErrorException();
         }
 
     }
 
-    async findOneEmployee(id: number){
-       return await this.findOne(id);
+    async findOneEmployee(id: number): Promise<Employee> {
+        return await this.findOne(id);
     }
 }

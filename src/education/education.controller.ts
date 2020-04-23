@@ -15,7 +15,8 @@ export class EducationController {
         try {
             let edu = await this.EuducationService.getEducation(param.id);
             return res.json({
-                message: "Danh sách education"
+                message: "Danh sách education",
+                data: edu
             })
         } catch (error) {
             return res.json({

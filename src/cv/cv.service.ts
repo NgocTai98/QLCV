@@ -14,28 +14,30 @@ export class CvService {
         private cvRepository: CvRepository,
         private jwtService: JwtService,
         private historyService: HistoryService
-    ){}
+    ) { }
 
-    async getCv(id: number) {
+    async getCv(id: number): Promise<Cv[]> {
         return await this.cvRepository.getCv(id);
     }
 
-    async createCv(id: number, cvCredentialsDto: CvCredentialsDto, token: string) {
+    async createCv(id: number, cvCredentialsDto: CvCredentialsDto, token: string): Promise<Cv> {
         let userId = await this.jwtService.verify(token);
         let newCv = await this.cvRepository.createCv(id, cvCredentialsDto);
-       
+
         await this.historyService.createHistory(newCv.id, userId.sub);
-       
+
         return newCv;
     }
-    async updateCv(id: number, cvCredentialsDto: CvCredentialsDto, idCv: number, token: string) {
+    async updateCv(id: number, cvCredentialsDto: CvCredentialsDto, idCv: number, token: string): Promise<Cv> {
         let userId = await this.jwtService.verify(token);
         let updateCv = await this.cvRepository.updateCv(id, cvCredentialsDto, idCv);
         let history = await this.historyService.createHistory(idCv, userId.sub);
         return updateCv;
     }
 
-    async deleteCv(idCv: number) {
-        return await this.cvRepository.deleteCv(idCv);
+    async deleteCv(idCv: number, token: string): Promise<void> {
+        let userId = await this.jwtService.verify(token);
+        await this.cvRepository.deleteCv(idCv);
+        let history = await this.historyService.createHistory(idCv, userId.sub);
     }
 }

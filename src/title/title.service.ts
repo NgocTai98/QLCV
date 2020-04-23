@@ -14,23 +14,23 @@ export class TitleService {
         private jwtService: JwtService
     ) { }
 
-    async getTitle() {
+    async getTitle(): Promise<Title[]> {
         return await this.titlesRepository.getTitle();
     }
 
-    async createTitle(titleCredentialsDto: TitleCredentialsDto, token: string) {
+    async createTitle(titleCredentialsDto: TitleCredentialsDto, token: string): Promise<Title> {
         let userId = await this.jwtService.verify(token);
-        await this.titlesRepository.createTitle(titleCredentialsDto, userId.sub);
-        return titleCredentialsDto;
+        let createTitle = await this.titlesRepository.createTitle(titleCredentialsDto, userId.sub);
+        return createTitle;
     }
 
-    async updateTitle(id: number, titleCredentialsDto, token: string) {
+    async updateTitle(id: number, titleCredentialsDto, token: string): Promise<Title> {
         let userId = await this.jwtService.verify(token);
-        await this.titlesRepository.updateTitle(id, titleCredentialsDto, userId.sub);
-        return titleCredentialsDto;
+        let updateTitle = await this.titlesRepository.updateTitle(id, titleCredentialsDto, userId.sub);
+        return updateTitle;
     }
 
-    async deleteTitle(id: number) {
-        return await this.titlesRepository.deleteTitle(id);
+    async deleteTitle(id: number): Promise<void> {
+         await this.titlesRepository.deleteTitle(id);
     }
 }
