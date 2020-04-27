@@ -13,6 +13,9 @@ export class EmployeeCredentialsDto {
     name: string;
 
     @IsString()
+    position: string;
+
+    @IsString()
     reference: string;
    
 }

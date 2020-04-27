@@ -4,12 +4,12 @@ import { Users } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
 
-@Controller('users')
+@Controller()
 export class UsersController {
     constructor(private Userservice: UsersService) { }
 
-    @Get()
-    @UseGuards(AuthGuard('jwt'))
+    @Get('users')
+    @UseGuards(AuthGuard('admin'))
     async getUsers(@Response() res: any, @Request() req: any) {
         try {
             
@@ -29,7 +29,7 @@ export class UsersController {
 
     }
 
-    @Get(':id')
+    @Get('user/:id')
     @UseGuards(AuthGuard('jwt'))
     async getUser(@Param() params: any, @Response() res: any) {
         try {
@@ -49,8 +49,8 @@ export class UsersController {
         }
 
     }
-    @Post()
-    @UseGuards(AuthGuard('jwt'))
+    @Post('user')
+    @UseGuards(AuthGuard('admin'))
     async create(@Body(ValidationPipe) userCredentialsDto: UserCredentialsDto, @Response() res: any) {
         try {
             let userCreate = await this.Userservice.createUser(userCredentialsDto);
@@ -68,8 +68,8 @@ export class UsersController {
 
     }
 
-    @Put(':id')
-    @UseGuards(AuthGuard('jwt'))
+    @Put('user/:id')
+    @UseGuards(AuthGuard('admin'))
     async update(@Param() Params: any, @Body(ValidationPipe) userCredentialsDto: UserCredentialsDto, @Response() res: any, @Request() req: any) {
         try {
            
@@ -91,8 +91,8 @@ export class UsersController {
 
     }
 
-    @Delete(':id')
-    @UseGuards(AuthGuard('jwt'))
+    @Delete('user/:id')
+    @UseGuards(AuthGuard('admin'))
     async deleteUser(@Param() params: any, @Response() res: any) {
         try {
             await this.Userservice.deleteUser(params.id);

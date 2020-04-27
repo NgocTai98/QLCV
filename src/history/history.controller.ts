@@ -8,7 +8,7 @@ export class HistoryController {
         private historyService: HistoryService
     ) { }
 
-    @Get(':id/history')
+    @Get(':id/histories')
     @UseGuards(AuthGuard('jwt'))
     async getHistory(@Param() param: any, @Response() res: any) {
         try {

@@ -9,7 +9,7 @@ export class QuanlificationController {
         private quanlificationService: QuanlificationService
     ) { }
 
-    @Get(':id/quanlification')
+    @Get(':id/quanlifications')
     @UseGuards(AuthGuard('jwt'))
     async getQuanlification(@Response() res: any, @Param() param: any) {
         try {

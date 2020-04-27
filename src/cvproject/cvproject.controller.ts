@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Post, Put, Delete, Param, Response, Request, Body, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, UseGuards, Post, Put, Delete, Param, Response, Request, Body, ValidationPipe, Header } from '@nestjs/common';
 import { CvprojectService } from './cvproject.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CvProjectCredentialsDto } from './dto/cvproject-credentials.dto';
@@ -7,9 +7,9 @@ import { CvProjectCredentialsDto } from './dto/cvproject-credentials.dto';
 export class CvprojectController {
     constructor(
         private cvprojectService: CvprojectService
-    ){}
+    ) { }
 
-    @Get(':id/cvproject')
+    @Get(':id/cvprojects')
     @UseGuards(AuthGuard('jwt'))
     async getCvProject(@Param() param: any, @Response() res: any) {
         try {
@@ -77,4 +77,22 @@ export class CvprojectController {
             })
         }
     }
+
+    @Post(':id/duplicatecv/idEm')
+    @UseGuards(AuthGuard('jwt'))
+    async duplicateCv(@Response() res: any, @Param() param: any) {
+        try {
+            let newCv = await this.cvprojectService.duplicateCv(param.id);
+            return res.json({
+                message: "Đã sao chép thành công",
+                data: newCv
+            })
+        } catch (error) {
+            return res.json({
+                message: "Không thể sao chép"
+            })
+        }
+    }
+
+
 }

@@ -9,7 +9,7 @@ export class ExperienceController {
         private ExperienceService: ExperienceService
     ) { }
 
-    @Get(':id/experience')
+    @Get(':id/experiences')
     @UseGuards(AuthGuard('jwt'))
     async getExperience(@Response() res: any, @Param() param: any) {
         try {

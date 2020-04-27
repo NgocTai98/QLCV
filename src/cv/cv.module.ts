@@ -8,11 +8,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CvRepository } from './cv.repository';
 import { Cv } from './cv.entity';
 import { HistoryModule } from 'src/history/history.module';
+import { CvprojectModule } from 'src/cvproject/cvproject.module';
+import { InfoquanlificationModule } from 'src/infoquanlification/infoquanlification.module';
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: jwtConstants.clientSecret,
       signOptions: {
         expiresIn: '1d',
       }
@@ -22,7 +24,9 @@ import { HistoryModule } from 'src/history/history.module';
     }),
     TypeOrmModule.forFeature([CvRepository]),
     TypeOrmModule.forFeature([Cv]),
-    HistoryModule
+    HistoryModule,
+    CvprojectModule,
+    InfoquanlificationModule
   ],
   providers: [CvService],
   controllers: [CvController]

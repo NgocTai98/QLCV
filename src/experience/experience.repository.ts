@@ -13,6 +13,7 @@ export class ExperiencesRepository extends Repository<Experience> {
             delete element.user.password;
             delete element.employee.id;
             delete element.employee.reference;
+            delete element.user.role;
         });
         return getEx;
     }

@@ -14,7 +14,7 @@ import { EmployeeModule } from 'src/employee/employee.module';
     TypeOrmModule.forFeature([QuanlificationRepository]),
     TypeOrmModule.forFeature([Quanlification]),
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: jwtConstants.clientSecret,
       signOptions: {
         expiresIn: '1d',
       }
@@ -25,6 +25,7 @@ import { EmployeeModule } from 'src/employee/employee.module';
     EmployeeModule
   ],
   providers: [QuanlificationService],
-  controllers: [QuanlificationController]
+  controllers: [QuanlificationController],
+  exports: [QuanlificationService]
 })
 export class QuanlificationModule {}

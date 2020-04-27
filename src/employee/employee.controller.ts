@@ -3,13 +3,13 @@ import { EmployeeService } from './employee.service';
 import { AuthGuard } from '@nestjs/passport';
 import { EmployeeCredentialsDto } from './dto/employee-credentials.dto';
 
-@Controller('employee')
+@Controller()
 export class EmployeeController {
-    constructor (
+    constructor(
         private EmployeeService: EmployeeService
-    ) {}
+    ) { }
 
-    @Get()
+    @Get('employees')
     @UseGuards(AuthGuard('jwt'))
     async getEmployees(@Response() res: any) {
         try {
@@ -25,7 +25,7 @@ export class EmployeeController {
         }
     }
 
-    @Post()
+    @Post('employee')
     @UseGuards(AuthGuard('jwt'))
     async createEmployee(@Body(ValidationPipe) employeeCredentialsDto: EmployeeCredentialsDto, @Response() res: any, @Request() req: any) {
         try {
@@ -43,7 +43,7 @@ export class EmployeeController {
         }
     }
 
-    @Delete(':id')
+    @Delete('employee/:id')
     @UseGuards(AuthGuard('jwt'))
     async deleteEmployee(@Param() params: any, @Response() res: any) {
         try {
@@ -58,9 +58,9 @@ export class EmployeeController {
         }
     }
 
-    @Put(':id')
+    @Put('employee/:id')
     @UseGuards(AuthGuard('jwt'))
-    async updateEmployee(@Body(ValidationPipe) employeeCredentialsDto: EmployeeCredentialsDto, @Response() res: any, @Request() req: any, @Param() params: any){
+    async updateEmployee(@Body(ValidationPipe) employeeCredentialsDto: EmployeeCredentialsDto, @Response() res: any, @Request() req: any, @Param() params: any) {
         try {
             let parts = req.headers.authorization.split(' ');
             let token = parts[1];
@@ -70,9 +70,26 @@ export class EmployeeController {
                 data: updateEmployee
             })
         } catch (error) {
-            
+            return res.json({
+                message: "Không thể sửa"
+            })
         }
     }
 
+    @Get('employee/search')
+    @UseGuards(AuthGuard('jwt'))
+    async searchEmployee(@Response() res: any, @Body() body: any) {
+        try {
+           let searchEmployee = await this.EmployeeService.searchEmployee(body);
+           return  res.json({
+               message: "Danh sách tìm kiếm",
+               data: searchEmployee
+           })
+        } catch (error) {
+            return res.json({
+                message: "Không thể tìm kiếm"
+            })
+        }
+    }
 
 }

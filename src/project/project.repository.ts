@@ -10,6 +10,7 @@ export class ProjectsRepository extends Repository<Project> {
         projects.forEach(element => {
             delete element.user.id;
             delete element.user.password;
+            delete element.user.role;
         });
         return projects;
     }

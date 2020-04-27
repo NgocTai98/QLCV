@@ -5,7 +5,8 @@ import { AuthService, Provider } from "./auth.service";
 import { OAuth2Client } from 'google-auth-library';
 import { UsersService } from "src/users/users.service";
 import { compare } from "bcrypt";
-
+import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from './constants';
 
 
 
@@ -15,11 +16,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google')
 
     constructor(
         private readonly authService: AuthService,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private jwtService: JwtService
     ) {
         super({
-            clientID: '829062708980-ms9d1e1p7povurfm24iotgauv56gaih1.apps.googleusercontent.com',     // <- Replace this with your client id
-            clientSecret: 'BjeY8CEYUL0rV1AWOob2vCY4', // <- Replace this with your client secret
+            clientID: jwtConstants.clientID,
+            clientSecret: jwtConstants.clientSecret, 
             callbackURL: 'http://localhost:3000/auth/google/callback',
             passReqToCallback: true,
             scope: ['profile', 'email']
@@ -30,8 +32,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google')
     async validate(request: any, accessToken: string, refreshToken: string, profile: any, done: Function) {
         try {
             const oAuth2Client = new OAuth2Client(
-                '829062708980-ms9d1e1p7povurfm24iotgauv56gaih1.apps.googleusercontent.com',
-                'BjeY8CEYUL0rV1AWOob2vCY4',
+                jwtConstants.clientID,
+                jwtConstants.clientSecret,
                 'http://localhost:3000/auth/google/callback'
             );
 
@@ -39,24 +41,26 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google')
 
             let result = await this.usersService.getUsers();
             const jwt: string = await this.authService.validateOAuthLogin(profile.id, Provider.GOOGLE);
-            const user =
-            {
-                jwt
-            }
-           
+         
             for (let i = 0; i < result.length; i++) {
-                const e = result[i];
 
-                if (e.email == email.email) {
-                      return user;
-                } 
-               
+                if (result[i].email == email.email) {
+
+                    let user = {
+                        sub: result[i].id,
+                        role: result[i].role,
+                        token: jwt
+                    };
+                   
+                    return user;
+                }
+
             }
             return {};
-            
+
         }
         catch (err) {
-           return err;
+            return err;
         }
     }
 

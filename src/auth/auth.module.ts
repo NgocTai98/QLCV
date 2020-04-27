@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module, forwardRef, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt'
 import {PassportModule} from '@nestjs/passport'
 import { AuthService } from './auth.service';
@@ -9,6 +9,8 @@ import { JwtStrategy } from './jwt.strategy';
 import { jwtConstants } from './constants';
 import { GoogleStrategy } from './google.strategy';
 import { UsersModule } from 'src/users/users.module';
+import { OAuth2Client } from 'google-auth-library';
+import { AdminStrategy } from './admin.strategy'
 
 
 
@@ -18,20 +20,20 @@ import { UsersModule } from 'src/users/users.module';
 @Module({
     imports: [
         JwtModule.register({
-            secret: jwtConstants.secret,
+            secret: jwtConstants.clientSecret,
             signOptions: {
                 expiresIn: '1d',
             }
         }),
         PassportModule.register({
-            defaultStrategy: 'jwt'
+            defaultStrategy: 'jwt',
         }),
         TypeOrmModule.forFeature([UserRepository]),  
         forwardRef(() => UsersModule),
     ],
-    providers: [AuthService, JwtStrategy, GoogleStrategy],
+    providers: [AuthService, JwtStrategy, GoogleStrategy, OAuth2Client, AdminStrategy],
     controllers: [AuthController],
-    exports: [JwtStrategy, PassportModule]
+    exports: [JwtStrategy, PassportModule, AdminStrategy]
 })
 export class AuthModule {
 }

@@ -1,10 +1,14 @@
 import { IsString, IsDate } from "class-validator";
 
 export class CvCredentialsDto {
-    @IsString()
-    hashTag: string;
+    
+    hashTag?: string;
 
-   
-    titleId: any;
+    titleId?: any;
+
+    
+    fullname?: string;
+
+    technology?: string;
 
 }

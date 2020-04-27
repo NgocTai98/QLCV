@@ -22,6 +22,7 @@ export class HistoryService {
             delete element.cv.id;
             delete element.user.id;
             delete element.user.password;
+            delete element.user.role;
         });
         return history;
 
@@ -46,7 +47,13 @@ export class HistoryService {
 
     }
 
-    async deleteHistory() {
-
+    async deleteHistory(idCv: number) {
+        let history = await this.HistoryRepository.find({
+            where: { cv: idCv }
+        })
+        for (let i = 0; i < history.length; i++) {
+            const e = history[i];
+            await this.HistoryRepository.delete(e.id);
+        }
     }
 }

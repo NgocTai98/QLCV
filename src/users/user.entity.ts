@@ -8,6 +8,7 @@ import { Education } from 'src/education/education.entity';
 import { Project } from 'src/project/project.entity';
 import { Title } from 'src/title/title.entity';
 import { History } from 'src/history/history.entity';
+import { Cv } from 'src/cv/cv.entity';
 
 @Entity()
 @Unique(['email'])
@@ -24,6 +25,9 @@ export class Users extends BaseEntity {
 
     @Column({ length: 255 }) 
     fullname:string;
+
+    @Column()
+    role: number
 
    
 
@@ -47,6 +51,9 @@ export class Users extends BaseEntity {
 
     @OneToMany(type => History, history => history.user)
     histories: History[]
+
+    @OneToMany(type =>Cv, cv => cv.user)
+    cvs: Cv[]
     
 
     async validatePassword(password: string): Promise<boolean> {

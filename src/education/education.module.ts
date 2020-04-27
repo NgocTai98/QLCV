@@ -14,7 +14,7 @@ import { EmployeeModule } from 'src/employee/employee.module';
     TypeOrmModule.forFeature([EducationsRepository]),
     TypeOrmModule.forFeature([Education]),
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: jwtConstants.clientSecret,
       signOptions: {
         expiresIn: '1d',
       }

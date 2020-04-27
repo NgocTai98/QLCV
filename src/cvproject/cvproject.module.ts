@@ -14,7 +14,7 @@ import { HistoryModule } from 'src/history/history.module';
     TypeOrmModule.forFeature([CvProjectRepository]),
     TypeOrmModule.forFeature([Cvproject]),
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: jwtConstants.clientSecret,
       signOptions: {
         expiresIn: '1d',
       }
@@ -25,6 +25,7 @@ import { HistoryModule } from 'src/history/history.module';
     HistoryModule
   ],
   providers: [CvprojectService],
-  controllers: [CvprojectController]
+  controllers: [CvprojectController],
+  exports: [CvprojectService]
 })
 export class CvprojectModule {}
