@@ -6,11 +6,17 @@ import { InternalServerErrorException } from "@nestjs/common";
 @EntityRepository(Title)
 export class TitleRepository extends Repository<Title> {
     async getTitle(): Promise<Title[]> {
-        return await this.find({
+        let getTitle =  await this.find({
             select: ["companyName", "address", "linkWeb", "phone"],
             relations: ["user"],
             
         });
+        getTitle.forEach(element => {
+            delete element.user.id;
+            delete element.user.password;
+            delete element.user.role;
+        });
+        return getTitle;
     }
 
     async createTitle(titleCredentialsDto: TitleCredentialsDto, userId: any): Promise<Title> {

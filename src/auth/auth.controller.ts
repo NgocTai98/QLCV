@@ -11,60 +11,64 @@ export class AuthController {
         private authService: AuthService,
     ) { }
 
-    @Post('/signup')
-    async signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res, @Request() req): Promise<void> {
-        try {
+    // @Post('/signup')
+    // async signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res, @Request() req): Promise<void> {
+    //     try {
 
-            let newUser = await this.authService.signUp(authCredentialsDto);
+    //         let newUser = await this.authService.signUp(authCredentialsDto);
 
-            return res.json({
-                message: 'Đã đăng ký thành công',
-                data: newUser
-            })
-        } catch (error) {
+    //         return res.json({
+    //             message: 'Đã đăng ký thành công',
+    //             data: newUser
+    //         })
+    //     } catch (error) {
 
-            return res.json({
-                message: 'Đăng ký không thành công'
-            })
-        }
+    //         return res.json({
+    //             message: 'Đăng ký không thành công'
+    //         })
+    //     }
 
-    }
+    // }
 
-    @Post('/signin')
-    async signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res: any) {
-        try {
-            let user = await this.authService.signIn(authCredentialsDto);
+    // @Post('/signin')
+    // async signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Response() res: any) {
+    //     try {
+    //         let user = await this.authService.signIn(authCredentialsDto);
 
-            return res.json({
-                message: 'Đăng nhập thành công',
-                data: user[0],
-                access_token: user[1]
-            })
-        } catch (error) {
-            return res.json({
-                message: 'đăng nhập không thành công'
-            })
-        }
+    //         return res.json({
+    //             message: 'Đăng nhập thành công',
+    //             data: user[0],
+    //             access_token: user[1]
+    //         })
+    //     } catch (error) {
+    //         return res.json({
+    //             message: 'đăng nhập không thành công'
+    //         })
+    //     }
 
-    }
+    // }
 
     @Get('google')
     @UseGuards(AuthGuard('google'))
     async googleLogin() {
-        // initiates the Google OAuth2 login flow
-        // return await this.authService.validateOAuthLogin('s', Provider);
-
-
+       
     }
 
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
-    async googleLoginCallback(@Request() req, @Response() res: any) {
-        // handles the Google OAuth2 callback
-        const jwt: string = await req.user.jwt;
-
-        if (jwt) {
-            res.redirect('http://localhost:3000');
+    async googleLoginCallback(@Request() req: any, @Response() res: any) {
+    
+        const token = req.user.token;
+        let id = req.user.sub;
+        let role = req.user.role
+       
+        let accessToken = await this.authService.signIn(id,role);
+     
+        if (token) {
+            res.json({
+                message: "Đăng nhập thành công",
+                access_token: accessToken
+            })
         } else {
             res.redirect('http://localhost:3000/auth/google');
         }
@@ -72,11 +76,11 @@ export class AuthController {
 
     }
 
-    @Get('protected')
-    @UseGuards(AuthGuard('jwt'))
-    protectedResource() {
-        return 'JWT is working!';
-    }
+    // @Get('protected')
+    // @UseGuards(AuthGuard('jwt'))
+    // protectedResource() {
+    //     return 'JWT is working!';
+    // }
 
 
 }

@@ -9,29 +9,29 @@ import { UserCredentialsDto } from "./dto/user-credentials.dto";
 
 @EntityRepository(Users)
 export class UserRepository extends Repository<Users> {
-    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<Users> {
-        const { email, password, fullname } = authCredentialsDto;
+    // async signUp(authCredentialsDto: AuthCredentialsDto): Promise<Users> {
+    //     const { email, password, fullname } = authCredentialsDto;
 
-        const salt = await bcrypt.genSalt();
+    //     const salt = await bcrypt.genSalt();
 
-        const user = new Users();
-        user.email = email;
-        user.password = await this.hashPassword(password, salt);
+    //     const user = new Users();
+    //     user.email = email;
+    //     user.password = await this.hashPassword(password, salt);
 
-        user.fullname = fullname;
+    //     user.fullname = fullname;
 
-        try {
-            await user.save();
-            return user;
-        } catch (error) {
-            if (error.code === '23505') {
-                throw new ConflictException('email already exists');
-            } else {
-                throw new InternalServerErrorException();
-            }
-        }
+    //     try {
+    //         await user.save();
+    //         return user;
+    //     } catch (error) {
+    //         if (error.code === '23505') {
+    //             throw new ConflictException('email already exists');
+    //         } else {
+    //             throw new InternalServerErrorException();
+    //         }
+    //     }
 
-    }
+    // }
 
     async validateUserPassword(authCredentialsDto: AuthCredentialsDto): Promise<Users> {
         const { email, password } = authCredentialsDto;
@@ -56,12 +56,13 @@ export class UserRepository extends Repository<Users> {
 
     }
     async createUser(userCredentialsDto: UserCredentialsDto): Promise<Users> {
-        const { email, password, fullname } = userCredentialsDto;
+        const { email, password, fullname, role } = userCredentialsDto;
         const newUser = new Users();
         newUser.email = email;
         const salt = await bcrypt.genSalt();
         newUser.password = await this.hashPassword(password, salt);
         newUser.fullname = fullname;
+        newUser.role = role;
 
         try {
             await newUser.save();
@@ -72,13 +73,14 @@ export class UserRepository extends Repository<Users> {
     }
 
     async updateUser(id: number, userCredentialsDto: UserCredentialsDto, userId: number): Promise<Users> {
-        const { email, password, fullname } = userCredentialsDto;
+        const { email, password, fullname, role } = userCredentialsDto;
         const userUpdate = await this.findOne(id);
 
         userUpdate.email = email;
         userUpdate.fullname = fullname;
         const salt = await bcrypt.genSalt();
         userUpdate.password = await this.hashPassword(password, salt);
+        userUpdate.role = role;
 
         try {
             await userUpdate.save();

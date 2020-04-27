@@ -9,7 +9,7 @@ export class EducationController {
         private EuducationService: EducationService
     ) { }
 
-    @Get(':id/education')
+    @Get(':id/educations')
     @UseGuards(AuthGuard('jwt'))
     async getEducation(@Response() res: any, @Param() param: any) {
         try {

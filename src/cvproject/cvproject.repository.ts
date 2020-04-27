@@ -1,4 +1,4 @@
-import { Repository, EntityRepository } from "typeorm";
+import { Repository, EntityRepository, Like } from "typeorm";
 import { Cvproject } from "./cvproject.entity";
 import { CvProjectCredentialsDto } from "./dto/cvproject-credentials.dto";
 import { InternalServerErrorException, All } from "@nestjs/common";
@@ -64,5 +64,25 @@ export class CvProjectRepository extends Repository<Cvproject> {
 
     async deleteCvProject(id: any, idCvpro: number): Promise<void> {
         await this.delete(idCvpro);
+    }
+
+    async duplicatecv(id: number) {
+
+    }
+
+    async findTechnology(tech: string) {
+        let result = await this.find({
+           where: {technology: Like(`%${tech}%`)},
+           relations: ["cv", "project"]
+        })
+      
+        let cvs = [];
+        result.forEach(element => {
+            cvs.push(element.cv.id);
+        });
+        let cvId = [...new Set(cvs)];
+
+        return cvId;
+        
     }
 }

@@ -14,6 +14,7 @@ import { TitleModule } from './title/title.module';
 import { CvModule } from './cv/cv.module';
 import { CvprojectModule } from './cvproject/cvproject.module';
 import { HistoryModule } from './history/history.module';
+import { InfoquanlificationModule } from './infoquanlification/infoquanlification.module';
 
 
 
@@ -34,7 +35,8 @@ import { HistoryModule } from './history/history.module';
     TitleModule,
     CvModule,
     CvprojectModule,
-    HistoryModule
+    HistoryModule,
+    InfoquanlificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

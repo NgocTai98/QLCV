@@ -27,7 +27,7 @@ export class QuanlificationService {
         return newQuan;
     }
 
-    async updateQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, quanId: number, token: string ): Promise<Quanlification> {
+    async updateQuanlification(id: number, quanlificationCredentials: QuanlificationCredentialsDto, quanId: number, token: string): Promise<Quanlification> {
         let userId = this.jwtService.verify(token);
         let updateQuan = await this.quanlificationRepository.updateQuanlification(id, quanlificationCredentials, quanId, userId.sub);
         let employee = await this.employeeService.findOneEmployee(id);
@@ -37,10 +37,14 @@ export class QuanlificationService {
     }
 
     async deleteQuanlification(id: number, quanId: number, token: string): Promise<void> {
-        let userId = this.jwtService.verify(token); 
+        let userId = this.jwtService.verify(token);
         await this.quanlificationRepository.deleteQuanlification(id, quanId);
         let employee = await this.employeeService.findOneEmployee(id);
         employee.user = userId.sub;
         employee.save();
+    }
+
+    async findQuan(idEm: any): Promise<Quanlification[]> {
+        return await this.quanlificationRepository.findQuan(idEm);
     }
 }

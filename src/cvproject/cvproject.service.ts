@@ -6,6 +6,7 @@ import { CvProjectRepository } from './cvproject.repository';
 import { JwtService } from '@nestjs/jwt';
 import { CvProjectCredentialsDto } from './dto/cvproject-credentials.dto';
 import { HistoryService } from 'src/history/history.service';
+import { Readable } from 'stream';
 
 @Injectable()
 export class CvprojectService {
@@ -38,4 +39,13 @@ export class CvprojectService {
         await this.cvprojectRepository.deleteCvProject(id, idCvpro);
         let history = await this.historyService.createHistory(id, userId.sub);
     }
+
+    async duplicateCv(id: number) {
+        await this.cvprojectRepository.duplicatecv(id);
+    }
+
+    async findTechnology(tech: string) {
+       return await this.cvprojectRepository.findTechnology(tech);
+    }
+
 }

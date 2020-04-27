@@ -21,6 +21,9 @@ export class Employee extends BaseEntity {
     name:string;
 
     @Column({ length: 255 }) 
+    position:string;
+
+    @Column({ length: 255 }) 
     reference:string;
 
    

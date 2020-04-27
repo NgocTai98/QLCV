@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
     constructor(
         private authService: AuthService
     ) {
@@ -21,8 +21,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: any, done: Function) {
         try {
            
-            return { sub: payload.id, role: payload.role };
-
+            if (payload.role == 1) {
+               
+                return { sub: payload.id, email: payload.email };
+            }
+           
         }
         catch (err) {
             return new UnauthorizedException('unauthorized', err.message);

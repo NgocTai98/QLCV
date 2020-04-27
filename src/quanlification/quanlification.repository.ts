@@ -6,20 +6,21 @@ import { InternalServerErrorException } from "@nestjs/common";
 @EntityRepository(Quanlification)
 export class QuanlificationRepository extends Repository<Quanlification> {
 
-    async getQuanlification(id: any) : Promise<Quanlification[]> {
+    async getQuanlification(id: any): Promise<Quanlification[]> {
         //  return  await this.find({select: ["name"], relations: ["employee", "user"], where:[{employee: id}]});
-        const quanlifications =  await this.createQueryBuilder("quanlification")
-        .select("quanlification.name")
-        .leftJoinAndSelect("quanlification.employee", "employee")
-        .leftJoinAndSelect("quanlification.user", "user")
-        .where("quanlification.employee = :id", {id: id})
-        .getMany();
+        const quanlifications = await this.createQueryBuilder("quanlification")
+            .select("quanlification.name")
+            .leftJoinAndSelect("quanlification.employee", "employee")
+            .leftJoinAndSelect("quanlification.user", "user")
+            .where("quanlification.employee = :id", { id: id })
+            .getMany();
 
         quanlifications.forEach(element => {
             delete element.employee.id;
             delete element.employee.reference;
             delete element.user.id;
             delete element.user.password;
+            delete element.user.role;
         });
 
         return quanlifications;
@@ -56,6 +57,13 @@ export class QuanlificationRepository extends Repository<Quanlification> {
 
     async deleteQuanlification(id: number, quanId: number): Promise<void> {
         await this.delete(quanId);
+    }
+
+    async findQuan(idEm: any): Promise<Quanlification[]> {
+        let quan = await this.find({
+            where: { employee: idEm }
+        });
+        return quan;
     }
 
 }

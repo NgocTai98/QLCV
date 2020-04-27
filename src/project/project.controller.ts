@@ -3,13 +3,13 @@ import { ProjectService } from './project.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ProjectCredentialsDto } from './dto/project-credentials.dto';
 
-@Controller('project')
+@Controller()
 export class ProjectController {
     constructor(
         private ProjectService: ProjectService
     ) { }
 
-    @Get()
+    @Get('projects')
     @UseGuards(AuthGuard('jwt'))
     async getProject(@Response() res: any) {
         try {
@@ -25,7 +25,7 @@ export class ProjectController {
         }
     }
 
-    @Post()
+    @Post('project')
     @UseGuards(AuthGuard('jwt'))
     async createProject(@Param() param: any, @Body(ValidationPipe) projectCredentialsDto: ProjectCredentialsDto, @Response() res: any, @Request() req: any) {
         try {
@@ -43,7 +43,7 @@ export class ProjectController {
         }
     }
 
-    @Put(':id') 
+    @Put('project/:id') 
     @UseGuards(AuthGuard('jwt'))
     async updateProject(@Param() param: any, @Body(ValidationPipe) projecCredentiaslDto: ProjectCredentialsDto, @Response() res: any, @Request() req: any) {
         try {
@@ -61,7 +61,7 @@ export class ProjectController {
         }
     }
 
-    @Delete(':id')
+    @Delete('project/:id')
     @UseGuards(AuthGuard('jwt'))
     async deleteProject(@Param() param: any, @Response() res: any) {
         try {

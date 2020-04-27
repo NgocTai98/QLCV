@@ -42,4 +42,12 @@ export class EmployeeService {
         return await this.employeesRepository.findOneEmployee(id);
     }
 
+    async searchEmployee(body: any): Promise<Employee[]> {
+       return await this.employeesRepository.searchEmployee(body);
+    }
+
+    // async findEmployee(id: number){
+    //     return await this.employeesRepository.findOneEmployee(id);
+    // }
+
 }

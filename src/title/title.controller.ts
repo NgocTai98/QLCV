@@ -3,13 +3,13 @@ import { TitleService } from './title.service';
 import { AuthGuard } from '@nestjs/passport';
 import { TitleCredentialsDto } from './dto/title-credentiasl.dto';
 
-@Controller('title')
+@Controller()
 export class TitleController {
     constructor(
         private titleService: TitleService
     ){}
 
-    @Get()
+    @Get('titles')
     @UseGuards(AuthGuard('jwt'))
     async getTitle(@Response() res: any){
         try {
@@ -25,7 +25,7 @@ export class TitleController {
         }
     }
 
-    @Post()
+    @Post('title')
     @UseGuards(AuthGuard('jwt'))
     async createTitle(@Body(ValidationPipe) titleCredentialsDto: TitleCredentialsDto, @Response() res: any, @Request() req: any){
         try {
@@ -43,7 +43,7 @@ export class TitleController {
         }
     }
 
-    @Put(':id')
+    @Put('title/:id')
     @UseGuards(AuthGuard('jwt'))
     async updateTitle(@Param() param: any, @Body(ValidationPipe) titleCredentialsDto: TitleCredentialsDto, @Response() res: any, @Request() req: any){
         try {
@@ -61,7 +61,7 @@ export class TitleController {
         }
     }
 
-    @Delete(':id')
+    @Delete('title/:id')
     @UseGuards(AuthGuard('jwt'))
     async deleteTitle(@Param() param: any, @Response() res: any){
         try {
