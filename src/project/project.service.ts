@@ -15,7 +15,7 @@ export class ProjectService {
     ) { }
 
     async getProject(): Promise<Project[]> {
-       return await this.projectsRepository.getProject();
+        return await this.projectsRepository.getProject();
     }
 
     async createProject(projectCredentialsDto: ProjectCredentialsDto, token: string): Promise<Project> {
@@ -32,5 +32,9 @@ export class ProjectService {
 
     async deleteProject(id: number): Promise<void> {
         await this.projectsRepository.deleteProject(id);
+    }
+
+    async findAll() {
+        return await this.ProjectRespository.find();
     }
 }

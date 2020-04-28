@@ -80,14 +80,30 @@ export class EmployeeController {
     @UseGuards(AuthGuard('jwt'))
     async searchEmployee(@Response() res: any, @Body() body: any) {
         try {
-           let searchEmployee = await this.EmployeeService.searchEmployee(body);
-           return  res.json({
-               message: "Danh sách tìm kiếm",
-               data: searchEmployee
-           })
+            let searchEmployee = await this.EmployeeService.searchEmployee(body);
+            return res.json({
+                message: "Danh sách tìm kiếm",
+                data: searchEmployee
+            })
         } catch (error) {
             return res.json({
                 message: "Không thể tìm kiếm"
+            })
+        }
+    }
+
+    @Get('employee/filter/user/:id')
+    @UseGuards(AuthGuard())
+    async filterUser(@Param() param: any, @Response() res: any) {
+        try {
+            let result = await this.EmployeeService.filterUser(param.id);
+            return res.json({
+                message: "Danh sách lọc theo user",
+                data: result
+            })
+        } catch (error) {
+            return res.json({
+                message: "Không thể hiển thị"
             })
         }
     }

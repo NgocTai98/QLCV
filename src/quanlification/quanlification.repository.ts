@@ -13,6 +13,8 @@ export class QuanlificationRepository extends Repository<Quanlification> {
             .leftJoinAndSelect("quanlification.employee", "employee")
             .leftJoinAndSelect("quanlification.user", "user")
             .where("quanlification.employee = :id", { id: id })
+            // .limit(1)
+            // .skip(0)
             .getMany();
 
         quanlifications.forEach(element => {

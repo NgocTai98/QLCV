@@ -45,9 +45,9 @@ export class InfoquanlificationService {
         await this.historyService.createHistory(idCv, userId.sub);
         return info;
     }
-    async createInfoQuan(idCv: number, infoQuanCredentialsDto: InfoQuanCredentialsDto, token: string): Promise<Infoquanlification> {
+    async createInfoQuan(idCv: number, body: any, token: string): Promise<void> {
         let userId = await this.jwtService.verify(token);
-        let newinfoQuan =  await this.infoQuanRepository.createInfoQuan(idCv, infoQuanCredentialsDto);
+        let newinfoQuan =  await this.infoQuanRepository.createInfoQuan(idCv, body);
         await this.historyService.createHistory(idCv, userId.sub);
         return newinfoQuan;
     }

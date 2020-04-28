@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
 import { PassportModule } from '@nestjs/passport';
 import { HistoryModule } from 'src/history/history.module';
+import { ProjectModule } from 'src/project/project.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { HistoryModule } from 'src/history/history.module';
     PassportModule.register({
       defaultStrategy: 'jwt'
     }),
-    HistoryModule
+    HistoryModule,
+    ProjectModule
   ],
   providers: [CvprojectService],
   controllers: [CvprojectController],
