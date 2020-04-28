@@ -33,8 +33,8 @@ export class CvService {
     async createCv(id: number, cvCredentialsDto: CvCredentialsDto, token: string): Promise<Cv> {
         let userId = await this.jwtService.verify(token);
         let newCv = await this.cvRepository.createCv(id, cvCredentialsDto, userId.sub);
-
         await this.infoQuanService.create(newCv.id, newCv.employee);
+        await this.cvprojectService.addCvPro(newCv.id);
         await this.historyService.createHistory(newCv.id, userId.sub);
 
         return newCv;

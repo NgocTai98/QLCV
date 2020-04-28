@@ -159,4 +159,32 @@ export class EmployeesRepository extends Repository<Employee> {
     //         where: {}
     //     })
     // }
+
+    async filterUser(id: number) {
+        let employees = await this.find({
+            where: {
+                user: id
+            },
+            select: ["employeeCode", "name", "reference", "position"],
+            relations: ["user", "quanlifications", "experiences", "educations", "cvs"]
+        })
+        employees.forEach(element => {
+            delete element.user.id;
+            delete element.user.password;
+            delete element.user.role;
+            element.quanlifications.forEach(e => {
+                delete e.id
+            });
+            element.experiences.forEach(e => {
+                delete e.id
+            });
+            element.educations.forEach(e => {
+                delete e.id
+            });
+            element.cvs.forEach(e => {
+                delete e.id
+            });
+        });
+        return employees;
+    }
 }

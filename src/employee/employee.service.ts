@@ -43,11 +43,15 @@ export class EmployeeService {
     }
 
     async searchEmployee(body: any): Promise<Employee[]> {
-       return await this.employeesRepository.searchEmployee(body);
+        return await this.employeesRepository.searchEmployee(body);
     }
 
     // async findEmployee(id: number){
     //     return await this.employeesRepository.findOneEmployee(id);
     // }
+
+    async filterUser(id: number) {
+        return await this.employeesRepository.filterUser(id);
+    }
 
 }

@@ -27,11 +27,11 @@ export class CvprojectController {
 
     @Post(':id/cvproject')
     @UseGuards(AuthGuard('jwt'))
-    async createCvProject(@Param() param: any, @Body(ValidationPipe) cvProjectCredentialsDto: CvProjectCredentialsDto, @Response() res: any, @Request() req: any) {
+    async createCvProject(@Param() param: any, @Body() body: any, @Response() res: any, @Request() req: any) {
         try {
             let parts = req.headers.authorization.split(" ");
             let token = parts[1];
-            let newCvpro = await this.cvprojectService.createCvProject(param.id, cvProjectCredentialsDto, token);
+            let newCvpro = await this.cvprojectService.createCvProject(param.id, body, token);
             return res.json({
                 message: "Đã thêm thành công",
                 data: newCvpro

@@ -33,19 +33,25 @@ export class CvProjectRepository extends Repository<Cvproject> {
 
     }
 
-    async createCvProject(id: any, cvProjectCredentialsDto: CvProjectCredentialsDto): Promise<Cvproject> {
-        const { responsibility, technology, projectId } = cvProjectCredentialsDto;
-        const newCvpro = new Cvproject();
-        newCvpro.responsibility = responsibility;
-        newCvpro.technology = technology;
-        newCvpro.cv = id;
-        newCvpro.project = projectId;
-        try {
-            await newCvpro.save();
-            return newCvpro;
-        } catch (error) {
-            throw new InternalServerErrorException();
+    async createCvProject(id: any, body: any): Promise<void> {
+
+        let responsibility = body.responsibility;
+        let technology = body.technology;
+        let projectId = body.projectId;
+        for (let i = 0; i < responsibility.length; i++) {
+            const element = responsibility[i];
+            const newCvpro = new Cvproject();
+            newCvpro.responsibility = element;
+            newCvpro.technology = technology;
+            newCvpro.cv = id;
+            newCvpro.project = projectId;
+            try {
+                await newCvpro.save();
+            } catch (error) {
+                throw new InternalServerErrorException();
+            }
         }
+
     }
 
     async updateCvProject(id: any, cvProjectCredentialsDto: CvProjectCredentialsDto, idCvpro: number): Promise<Cvproject> {
@@ -72,10 +78,10 @@ export class CvProjectRepository extends Repository<Cvproject> {
 
     async findTechnology(tech: string) {
         let result = await this.find({
-           where: {technology: Like(`%${tech}%`)},
-           relations: ["cv", "project"]
+            where: { technology: Like(`%${tech}%`) },
+            relations: ["cv", "project"]
         })
-      
+
         let cvs = [];
         result.forEach(element => {
             cvs.push(element.cv.id);
@@ -83,6 +89,13 @@ export class CvProjectRepository extends Repository<Cvproject> {
         let cvId = [...new Set(cvs)];
 
         return cvId;
-        
+
+    }
+
+    async addCvPro(idCv: any, idPro: any) {
+        const newcvpro = new Cvproject();
+        newcvpro.cv = idCv;
+        newcvpro.project = idPro;
+        newcvpro.save();
     }
 }

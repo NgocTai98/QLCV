@@ -10,7 +10,7 @@ export class InfoquanlificationController {
     ) { }
 
     @Get(':idCv/infoQuans')
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async getInfoQuan(@Param() param: any, @Response() res: any) {
         try {
             let infoQuan = await this.infoQuanService.getInfoQuan(param.idCv);
@@ -26,12 +26,12 @@ export class InfoquanlificationController {
     }
 
     @Post(':idCv/infoQuan')
-    @UseGuards(AuthGuard())
-    async createInfoQuan(@Param() param: any, @Body(ValidationPipe) infoQuanCredentialsDto: InfoQuanCredentialsDto, @Response() res: any, @Request() req: any) {
+    @UseGuards(AuthGuard('jwt'))
+    async createInfoQuan(@Param() param: any, @Body(ValidationPipe) body: any, @Response() res: any, @Request() req: any) {
         try {
             let parts = req.headers.authorization.split(" ");
             let token = parts[1];
-            let newinfoQuan = await this.infoQuanService.createInfoQuan(param.idCv, infoQuanCredentialsDto, token);
+            let newinfoQuan = await this.infoQuanService.createInfoQuan(param.idCv, body, token);
             return res.json({
                 message: 'đã thêm infoquan',
                 data: newinfoQuan
@@ -44,7 +44,7 @@ export class InfoquanlificationController {
     }
 
     @Put(':idCv/infoQuan/:id')
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async updateInfoQuan(@Param() param: any, @Body(ValidationPipe) infoQuanCredentialsDto: InfoQuanCredentialsDto, @Response() res: any, @Request() req: any) {
         try {
             let parts = req.headers.authorization.split(" ");
@@ -62,7 +62,7 @@ export class InfoquanlificationController {
     }
 
     @Delete(':idCv/infoQuan/:id')
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async deleteInfoQuan(@Param() param: any, @Response() res: any, @Request() req: any) {
         try {
             let parts = req.headers.authorization.split(" ");

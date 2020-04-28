@@ -3,6 +3,7 @@ import { Infoquanlification } from "./infoquanlification.entity";
 import { InternalServerErrorException } from "@nestjs/common";
 import { InfoQuanCredentialsDto } from "./dto/infoquanlification-credentials.dto";
 
+
 @EntityRepository(Infoquanlification)
 export class InfoQuanRepository extends Repository<Infoquanlification>{
     async getInfoQuan(id: number): Promise<Infoquanlification[]> {
@@ -11,6 +12,9 @@ export class InfoQuanRepository extends Repository<Infoquanlification>{
             select: ["name"],
             relations: ["cv"]
         })
+        infoQuans.forEach(element => {
+            delete element.cv.id;
+        });
         return infoQuans;
     }
 
@@ -45,16 +49,20 @@ export class InfoQuanRepository extends Repository<Infoquanlification>{
         return await this.delete(id);
     }
 
-    async createInfoQuan(idCv: any, infoQuanCredentialsDto: InfoQuanCredentialsDto): Promise<Infoquanlification> {
-        const { name } = infoQuanCredentialsDto;
-        const newInfoQuan = new Infoquanlification();
-        newInfoQuan.name = name;
-        newInfoQuan.cv = idCv;
-        try {
-            await newInfoQuan.save();
-            return newInfoQuan;
-        } catch (error) {
-            throw new InternalServerErrorException();
+    async createInfoQuan(idCv: any, body: any): Promise<void> {
+
+        const name = body.name;
+        for (let i = 0; i < name.length; i++) {
+            const element = name[i];
+            const newInfoQuan = new Infoquanlification();
+            newInfoQuan.name = element;
+            newInfoQuan.cv = idCv;
+            try {
+                await newInfoQuan.save();
+            } catch (error) {
+                throw new InternalServerErrorException();
+            }
         }
+
     }
 }
